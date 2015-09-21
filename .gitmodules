@@ -1,0 +1,3 @@
+[submodule ".#mirror"]
+	path = ".#mirror"
+	url = https://github.com/lukesampson/scoop.git
