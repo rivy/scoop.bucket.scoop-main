@@ -1,0 +1,14 @@
+{
+    "version":  "1.4",
+    "license":  "http://creativecommons.org/licenses/by/3.0/",
+    "architecture": {
+        "32bit": {
+            "url":  "http://stedolan.github.io/jq/download/win32/jq.exe"
+        },
+        "64bit": {
+            "url":  "http://stedolan.github.io/jq/download/win64/jq.exe"
+        }
+    },
+    "homepage":  "http://stedolan.github.io/jq/",
+    "bin":  "jq.exe"
+}
