@@ -77,7 +77,7 @@ use Term::ANSIColor; $Term::ANSIColor::EACHLINE = "\n"; $^O eq 'MSWin32' && eval
 BEGIN {
 use Module::CoreList;
 my $ME = do {$_ = (File::Spec->splitpath($0))[2]; s/(?<=.)\.[^.]*$//; $_};
-my @modules = qw[ Config::General PadWalker Data::Dump DateTime::HiRes Log::Any Log::Any::Adapter Log::Any::Adapter::Dispatch Log::Dispatch File::chdir IPC::Run3 Path::Iterator::Rule Path::Tiny ];
+my @modules = qw[ DateTime::Format::Flexible Config::General PadWalker Data::Dump DateTime::HiRes Log::Any Log::Any::Adapter Log::Any::Adapter::Dispatch Log::Dispatch File::chdir IPC::Run3 Path::Iterator::Rule Path::Tiny ];
 my @missing_modules = qw();
 foreach my $module (@modules) {
     if (not eval "require $module; 1;") { push @missing_modules, $module; }
@@ -269,7 +269,7 @@ my $output;
     local $CWD = $mirror_path;  # NOTE: must be absolute path if changing between volumes (eg, `File::Spec->rel2abs($mirror_path)`)?; ToDO: add issue noting *intermittant* GPF when chdir from 'd:\...' to 'c:\...' unless target is absolute path @ https://github.com/dagolden/File-chdir/issues
     # NOTE: `D:\...>perl -e "use File::chdir; { local $CWD='C:..\\.mirror'; };"` DOESN'T reproduce the issue
     $last_mirror_commit_date = q{1970-01-01};  # earliest possible time (within the unix epoch)
-    $last_mirror_commit_date = Term::ANSIColor::colorstrip(`git log -1 --date=iso --format="%cd"`);
+    chomp( $last_mirror_commit_date = Term::ANSIColor::colorstrip(`git log -1 --date=iso --format="%cd"`) );
     $log->debug( dump_var( q{$last_mirror_commit_date} ) );
     chomp( $initial_mirror_id = Term::ANSIColor::colorstrip( `git describe --all --long --always` ) );
     $log->debug( dump_var( q{$initial_mirror_id} ) );
@@ -281,8 +281,10 @@ my $output;
     $interval_log = '* (no changes)';
     $mirror_commit_date = $last_mirror_commit_date;
     if ($updated_mirror_id ne $initial_mirror_id) {
-        $interval_log = Term::ANSIColor::colorstrip(`git log --oneline --no-merges --since "$last_mirror_commit_date" -- $in_mirror_source`);
-        $mirror_commit_date = Term::ANSIColor::colorstrip(`git log -1 --date=iso --format="%cd"`);
+        my $log_date = DateTime::Format::Flexible->parse_datetime( $last_mirror_commit_date )->add( seconds => 1 )->strftime(q{%FT%H:%M:%S%z});
+        $log->trace( dump_var( q{$log_date} ) );
+        $interval_log = Term::ANSIColor::colorstrip(`git log --oneline --no-merges --since "$log_date" -- $in_mirror_source`);
+        chomp( $mirror_commit_date = Term::ANSIColor::colorstrip(`git log -1 --date=iso --format="%cd"`) );
         }
     $log->debug( dump_var( q{$interval_log} ) );
     $log->debug( dump_var( q{$mirror_commit_date} ) );
