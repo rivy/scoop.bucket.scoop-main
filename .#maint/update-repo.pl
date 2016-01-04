@@ -77,7 +77,7 @@ use Term::ANSIColor; $Term::ANSIColor::EACHLINE = "\n"; $^O eq 'MSWin32' && eval
 BEGIN {
 use Module::CoreList;
 my $ME = do {$_ = (File::Spec->splitpath($0))[2]; s/(?<=.)\.[^.]*$//; $_};
-my @modules = qw[ Config::General PadWalker DateTime::HiRes Log::Any Log::Any::Adapter Log::Any::Adapter::Dispatch Log::Dispatch File::chdir IPC::Run3 Path::Iterator::Rule Path::Tiny ];
+my @modules = qw[ Config::General PadWalker Data::Dump DateTime::HiRes Log::Any Log::Any::Adapter Log::Any::Adapter::Dispatch Log::Dispatch File::chdir IPC::Run3 Path::Iterator::Rule Path::Tiny ];
 my @missing_modules = qw();
 foreach my $module (@modules) {
     if (not eval "require $module; 1;") { push @missing_modules, $module; }
@@ -115,7 +115,9 @@ my %log = ( default => { level => 'debug' }, console => { level => 'notice' } );
 
 my $log = Log::Any->get_logger(category => $ME);
 
-my @log_dir_default_locations = ( "~/.logs", "~/.log", "$ENV{LOCALAPPDATA}/logs", "$ENV{LOCALAPPDATA}/log", "$ME_dir", );
+my @log_dir_default_locations = ( "~/.logs", "~/.log" );
+if ($^O eq 'MSWin32' && defined $ENV{LOCALAPPDATA}) { @log_dir_default_locations = ( @log_dir_default_locations, "$ENV{LOCALAPPDATA}/logs", "$ENV{LOCALAPPDATA}/log" ) };
+@log_dir_default_locations = ( @log_dir_default_locations, "$ME_dir" );
 my $log_file = path(List::Util::first { -e path($_)->child(q{.}) } @log_dir_default_locations)->child("$ME.log");
 
 my $s_colorize = sub { my %p = @_; return colorize($p{level}, $p{message}) };
@@ -273,7 +275,7 @@ my $output;
     $log->debug( dump_var( q{$initial_mirror_id} ) );
     $output = Term::ANSIColor::colorstrip(`git fetch`); $ARGV{trace} && $log->trace( $output );
     $output = Term::ANSIColor::colorstrip(`git checkout --quiet origin/master`); $ARGV{trace} && $log->trace( $output );
-    chomp( $updated_mirror_id = Term::ANSIColor::colorstrip(`git describe --all --long`) );
+    chomp( $updated_mirror_id = Term::ANSIColor::colorstrip(`git describe --all --long --always`) );
     $log->debug( dump_var( q{$updated_mirror_id} ) );
 
     $interval_log = '* (no changes)';

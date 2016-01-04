@@ -1,13 +1,16 @@
-# Mirror of main scoop bucket
+# Mirror of [scoop](https://github.com/lukesampson/scoop) "main" bucket
 
-### initialize mirror submodule
+ref: [Scoop: a command-line installer for Windows](http://scoop.sh)
 
-```
-git submodule add https://github.com/lukesampson/scoop.git .mirror
-```
-
-### maintainence
+### initialization
 
 ```
-perl REPO_DIR/.maint/update-repo.pl
+git clone --recursive https://github.com/rivy/scoop.bucket-scoop.main.git REPO_DIR
+```
+
+
+### maintenance
+
+```
+perl REPO_DIR/.#maint/update-repo.pl
 ```
