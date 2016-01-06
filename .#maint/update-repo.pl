@@ -111,7 +111,7 @@ my $ME_dir = path($0)->parent;
 my $colorize = 0;
 my %color = ( success => 'green', debug => 'yellow', info => 'cyan', notice => '', warning => 'magenta', error => 'red' );
 
-my %log = ( default => { level => 'debug' }, console => { level => 'notice' } );
+my %log = ( default => { level => 'debug' }, console => { level => 'info' } );
 
 my $log = Log::Any->get_logger(category => $ME);
 
@@ -153,6 +153,8 @@ my $mirror_path = $repo_path->child('.#mirror');
 
 my $in_mirror_source = './bucket';
 my $in_repo_dest = '.';
+
+my $commit_summary_length = 80;
 
 $code_timing{init}{stop} = Benchmark->new;
 
@@ -264,6 +266,7 @@ my ($initial_mirror_id, $updated_mirror_id);
 my $last_mirror_commit_date;
 my $mirror_commit_date;
 my $interval_log;
+my $interval_log_summary;
 my $output;
 {
     local $CWD = $mirror_path;  # NOTE: must be absolute path if changing between volumes (eg, `File::Spec->rel2abs($mirror_path)`)?; ToDO: add issue noting *intermittant* GPF when chdir from 'd:\...' to 'c:\...' unless target is absolute path @ https://github.com/dagolden/File-chdir/issues
@@ -279,11 +282,14 @@ my $output;
     $log->debug( dump_var( q{$updated_mirror_id} ) );
 
     $interval_log = '* (no changes)';
+    $interval_log_summary = '* (no changes)';
     $mirror_commit_date = $last_mirror_commit_date;
     if ($updated_mirror_id ne $initial_mirror_id) {
         my $log_date = DateTime::Format::Flexible->parse_datetime( $last_mirror_commit_date )->add( seconds => 1 )->strftime(q{%FT%H:%M:%S%z});
         $log->trace( dump_var( q{$log_date} ) );
-        $interval_log = Term::ANSIColor::colorstrip(`git log --oneline --no-merges --since "$log_date" -- $in_mirror_source`);
+        $interval_log = Term::ANSIColor::colorstrip(`git log --pretty=format:"%h @ %cI  %s" --no-merges --since "$log_date" -- $in_mirror_source`);
+        $interval_log =~ s/(\d{4}-\d\d-\d\d)(?:T|\s+)(\d\d\:\d\d:\d\d)\s*([+-]\d\d:?\d\d)/$1.$2$3/gm; # cosmetic reformat of date/time fields
+        $interval_log_summary = join( '; ', (split /\n/, Term::ANSIColor::colorstrip(`git log --pretty=format:"%s" --no-merges --since "$log_date" -- $in_mirror_source`)));
         chomp( $mirror_commit_date = Term::ANSIColor::colorstrip(`git log -1 --date=iso --format="%cd"`) );
         }
     $log->debug( dump_var( q{$interval_log} ) );
@@ -364,7 +370,11 @@ if (($updated_mirror_id ne $initial_mirror_id) || $ARGV{force}) {
     my $tempfile = Path::Tiny->tempfile( TEMPLATE => "$ME.($PID).XXXXXXXX", SUFFIX => '.txt' );
     my $fh = $tempfile->filehandle('>');
 
-    my $commit_msg = "auto-update:($tag): mirror of github.com/lukesampson/scoop:bucket (\"main\")\n\n.# Summary (changes by commit)\n\n".$interval_log;
+    my $commit_summary = "update:($tag): $interval_log_summary";
+    if ((length $commit_summary) > $commit_summary_length) { my $elipsis='...'; $commit_summary = (substr $commit_summary, 0, $commit_summary_length-(length $elipsis)) . $elipsis; }
+
+    my $commit_msg = "$commit_summary\n\n* mirror of github.com/lukesampson/scoop:bucket (\"main\")\n\n.# Summary (changes by commit)\n\n$interval_log";
+
     $ARGV{trace} && $log->trace( dump_var('$commit_msg') );
 
     print $fh $commit_msg;
