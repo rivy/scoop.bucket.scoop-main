@@ -276,7 +276,7 @@ my $output;
     $log->debug( dump_var( q{$last_mirror_commit_date} ) );
     chomp( $initial_mirror_id = Term::ANSIColor::colorstrip( `git describe --all --long --always` ) );
     $log->debug( dump_var( q{$initial_mirror_id} ) );
-    $output = Term::ANSIColor::colorstrip(`git fetch`); $ARGV{trace} && $log->trace( $output );
+    $output = Term::ANSIColor::colorstrip(`git fetch --quiet`); $ARGV{trace} && $log->trace( $output );
     $output = Term::ANSIColor::colorstrip(`git checkout --quiet origin/master`); $ARGV{trace} && $log->trace( $output );
     chomp( $updated_mirror_id = Term::ANSIColor::colorstrip(`git describe --all --long --always`) );
     $log->debug( dump_var( q{$updated_mirror_id} ) );
