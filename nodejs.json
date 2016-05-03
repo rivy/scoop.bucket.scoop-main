@@ -1,15 +1,15 @@
 {
     "homepage": "http://nodejs.org",
-    "version": "5.10.1",
+    "version": "6.0.0",
     "license": "MIT",
     "architecture": {
         "64bit": {
-            "url": "https://nodejs.org/dist/v5.10.1/node-v5.10.1-x64.msi",
-            "hash": "a1207fa1e831c1347d338546e353ea195d5cb1acb7e290dad8836153aad11c35"
+            "url": "https://nodejs.org/dist/v6.0.0/node-v6.0.0-x64.msi",
+            "hash": "933a15791a67a2740cbd082a8d9aebc43162ec6d4db335abf62121a9561c57d4"
         },
         "32bit": {
-            "url": "https://nodejs.org/dist/v5.10.1/node-v5.10.1-x86.msi",
-            "hash": "87a902472fe0458ee444456ef5a9bdbd9247c7747b4deeb7a7ded43e56b43daa"
+            "url": "https://nodejs.org/dist/v6.0.0/node-v6.0.0-x86.msi",
+            "hash": "614380711039b7cc23db8d8cbf42ed9f4a6f0501eb8a143490f7ece952037bc9"
         }
     },
     "env_add_path": "nodejs",
@@ -18,7 +18,7 @@
 rm $dir\\nodejs\\node_modules\\npm\\npmrc
 npm update -g",
     "checkver": {
-        "url": "https://nodejs.org/en/download/stable/",
-        "re": "Current stable version: <strong>v([0-9\\.]+)</strong>"
+        "url": "https://nodejs.org/en/download/current/",
+        "re": "Current version: <strong>v([0-9\\.]+)</strong>"
     }
 }
