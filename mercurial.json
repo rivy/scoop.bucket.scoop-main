@@ -1,21 +1,21 @@
 {
     "homepage": "https://www.mercurial-scm.org/",
-    "version": "3.9.1",
+    "version": "4.0",
     "license": "http://www.gnu.org/licenses/gpl-2.0.txt",
     "architecture": {
         "64bit": {
-            "url": "https://www.mercurial-scm.org/release/windows/Mercurial-3.9.1-x64.exe",
-            "hash": "E7381588237965503644383ED8322A0072A6899D1C35D606A065B1CBE01B15D7"
+            "url": "https://www.mercurial-scm.org/release/windows/Mercurial-4.0-x64.exe",
+            "hash": "88ed2fdabe8e8d48d3ac88d7aafb5a3a766e39d163444aa72aaeec962339fd9b"
         },
         "32bit": {
-            "url": "https://www.mercurial-scm.org/release/windows/Mercurial-3.9.1.exe",
-            "hash": "68284536732A13D2238BCB73EAC67C4248D5370F8FCA0DB7C4DA8159C5BA9BA0"
+            "url": "https://www.mercurial-scm.org/release/windows/Mercurial-4.0.exe",
+            "hash": "7ddb974ecd327fd9a355ab4dc94de3c6b39f99dd5d456b27ccda8ac76d19bfe4"
         }
     },
     "innosetup": true,
     "bin": "hg.exe",
     "checkver": {
         "url": "https://www.mercurial-scm.org/wiki/WhatsNew",
-        "re": "Mercurial\\s+([0-9\\.]+)\\s+\\([0-9\\-]+\\)"
+        "re": "Mercurial\\s+([\\d.]+)\\s+\\([0-9\\-]+\\)"
     }
 }
