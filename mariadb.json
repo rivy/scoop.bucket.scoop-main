@@ -1,17 +1,17 @@
 {
     "homepage": "http://mariadb.org",
-    "version": "10.1.19",
+    "version": "10.1.21",
     "license": "GPL2",
     "architecture": {
         "64bit": {
-            "url": "https://downloads.mariadb.org/f/mariadb-10.1.19/winx64-packages/mariadb-10.1.19-winx64.zip",
-            "hash": "sha1:7feb863b355bbf73d77ce3dafd416928e2459545",
-            "extract_dir": "mariadb-10.1.19-winx64"
+            "url": "https://downloads.mariadb.org/f/mariadb-10.1.21/winx64-packages/mariadb-10.1.21-winx64.zip",
+            "hash": "0b2058a2345c725cbb962ed3b6fd501e595a048f95eda1affa1e8576e1d6a00b",
+            "extract_dir": "mariadb-10.1.21-winx64"
         },
         "32bit": {
-            "url": "https://downloads.mariadb.org/f/mariadb-10.1.19/win32-packages/mariadb-10.1.19-win32.zip",
-            "hash": "sha1:e107f9b8b3ec60def3077880bec502150f45a340",
-            "extract_dir": "mariadb-10.1.19-win32"
+            "url": "https://downloads.mariadb.org/f/mariadb-10.1.21/win32-packages/mariadb-10.1.21-win32.zip",
+            "hash": "9cccc585d2b813c590a74141619ca446050a6bfc809ebc238a1f621b685c9f45",
+            "extract_dir": "mariadb-10.1.21-win32"
         }
     },
     "bin": [
@@ -50,5 +50,17 @@
     "checkver": {
         "url": "https://downloads.mariadb.org/",
         "re": "Download ([\\d.]+) Stable"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://downloads.mariadb.org/f/mariadb-$version/winx64-packages/mariadb-$version-winx64.zip",
+                "extract_dir": "mariadb-$version-winx64"
+            },
+            "32bit": {
+                "url": "https://downloads.mariadb.org/f/mariadb-$version/win32-packages/mariadb-$version-win32.zip",
+                "extract_dir": "mariadb-$version-win32"
+            }
+        }
     }
 }

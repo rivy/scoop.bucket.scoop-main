@@ -1,17 +1,20 @@
 {
     "homepage": "https://www.imagemagick.org/script/index.php",
     "license": "https://www.imagemagick.org/script/license.php",
-    "version": "7.0.3-8",
+    "version": "7.0.4-5",
     "architecture": {
         "64bit": {
-            "url": "https://www.imagemagick.org/download/binaries/ImageMagick-7.0.3-8-portable-Q16-x64.zip",
-            "hash": "298F9F6D189DC7E95445BF2067F9DC310E6F5565BB945F9D8A1EE294DB599893"
+            "url": "https://www.imagemagick.org/download/binaries/ImageMagick-7.0.4-5-portable-Q16-x64.zip",
+            "hash": "edc13ebb1902de5ce3489c11d15e389fee2d740430151d96bfb191fd1532de67"
         },
         "32bit": {
-            "url": "https://www.imagemagick.org/download/binaries/ImageMagick-7.0.3-8-portable-Q16-x86.zip",
-            "hash": "E0722910BDA869B5814D713F592F340C425378ECCAE1DC8A63C4E3691C4BD78D"
+            "url": "https://www.imagemagick.org/download/binaries/ImageMagick-7.0.4-5-portable-Q16-x86.zip",
+            "hash": "65b2550b71e46f9964d3aff66b4d88a033e0de247ba8b93637dedf440331f82e"
         }
     },
+    "depends": [
+        "ffmpeg"
+    ],
     "env_add_path": ".",
     "bin": [
         "compare.exe",
@@ -19,7 +22,6 @@
         "conjure.exe",
         "convert.exe",
         "dcraw.exe",
-        "ffmpeg.exe",
         "hp2xx.exe",
         "identify.exe",
         "IMDisplay.exe",
@@ -28,5 +30,19 @@
         "montage.exe",
         "stream.exe"
     ],
-    "checkver": "The current release is ImageMagick <a.*?>([0-9\\.p-]+)</a>"
+    "checkver": "The current release is ImageMagick <a.*?>([0-9\\.p-]+)</a>",
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://www.imagemagick.org/download/binaries/ImageMagick-$version-portable-Q16-x64.zip"
+            },
+            "32bit": {
+                "url": "https://www.imagemagick.org/download/binaries/ImageMagick-$version-portable-Q16-x86.zip"
+            }
+        },
+        "hash": {
+            "mode": "rdf",
+            "url": "https://www.imagemagick.org/download/binaries/digest.rdf"
+        }
+    }
 }

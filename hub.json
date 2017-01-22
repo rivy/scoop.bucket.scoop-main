@@ -16,7 +16,16 @@
         "bin\\hub.exe"
     ],
     "checkver": {
-        "url": "https://github.com/github/hub/releases/latest",
-        "re": "\/releases\/tag\/v([\\d.]+)"
+        "github": "https://github.com/github/hub"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/github/hub/releases/download/v$version/hub-windows-amd64-$version.zip"
+            },
+            "32bit": {
+                "url": "https://github.com/github/hub/releases/download/v$version/hub-windows-386-$version.zip"
+            }
+        }
     }
 }

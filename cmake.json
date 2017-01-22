@@ -1,17 +1,17 @@
 {
     "homepage": "https://cmake.org/",
-    "version": "3.6.3",
+    "version": "3.7.2",
     "license": "https://cmake.org/licensing/",
     "architecture": {
         "64bit": {
-            "url": "https://cmake.org/files/v3.6/cmake-3.6.3-win64-x64.zip",
-            "hash": "263b78aba6e63098353b2f8beecf293f5f307f9a70575a81867c3f8cb18a6a99",
-            "extract_dir": "cmake-3.6.3-win64-x64"
+            "url": "https://cmake.org/files/v3.7/cmake-3.7.2-win64-x64.zip",
+            "hash": "def3bb81dfd922ce1ea2a0647645eefb60e128d520c8ca707c5996c331bc8b48",
+            "extract_dir": "cmake-3.7.2-win64-x64"
         },
         "32bit": {
-            "url": "https://cmake.org/files/v3.6/cmake-3.6.3-win32-x86.zip",
-            "hash": "556628f134b2372b8f02688787ca44b02d893c57b6eeaa9271ac51a4a2d4a4ed",
-            "extract_dir": "cmake-3.6.3-win32-x86"
+            "url": "https://cmake.org/files/v3.7/cmake-3.7.2-win32-x86.zip",
+            "hash": "ec5e299d412e0272e01d4de5bf07718f42c96361f83d51cc39f91bf49cc3e5c3",
+            "extract_dir": "cmake-3.7.2-win32-x86"
         }
     },
     "bin": [
@@ -21,5 +21,20 @@
         "bin/ctest.exe",
         "bin/cmake-gui.exe"
     ],
-    "checkver": "CMake\\s+([\\d.]+)\\s+available\\s+for\\s+download"
+    "checkver": {
+        "re": "Latest\\s+Release\\s+\\(([\\d+.]+)\\)",
+        "url": "https://cmake.org/download/"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://cmake.org/files/v$majorVersion.$minorVersion/cmake-$version-win64-x64.zip",
+                "extract_dir": "cmake-$version-win64-x64"
+            },
+            "32bit": {
+                "url": "https://cmake.org/files/v$majorVersion.$minorVersion/cmake-$version-win32-x86.zip",
+                "extract_dir": "cmake-$version-win32-x86"
+            }
+        }
+    }
 }

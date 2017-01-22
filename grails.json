@@ -1,19 +1,22 @@
 {
     "homepage": "https://grails.org/",
-    "version": "3.0.9",
+    "version": "3.1.15",
     "license": "Apache 2.0",
-    "url": "https://github.com/grails/grails-core/releases/download/v3.0.9/grails-3.0.9.zip",
-    "hash": "f1bfdec6efd45283c810e29be4433f134118344d2eabea870ae553fb66c864b1",
-    "extract_dir": "grails-3.0.9",
+    "url": "https://github.com/grails/grails-core/releases/download/v3.1.15/grails-3.1.15.zip",
+    "hash": "ebc9bcce6dcced9ef55d339aa78a9e439447d44b161f31a600c284d64904fd53",
+    "extract_dir": "grails-3.1.15",
     "bin": [
         "bin\\grails.bat"
     ],
-    "set_env": {
+    "env_set": {
         "GRAILS_HOME": "$dir"
     },
     "depends": "openjdk",
     "checkver": {
-        "url": "https://github.com/grails/grails-core/releases/latest",
-        "re": "\/releases\/tag\/v([\\d.]+)"
+        "github": "https://github.com/grails/grails-core"
+    },
+    "autoupdate": {
+        "url": "https://github.com/grails/grails-core/releases/download/v$version/grails-$version.zip",
+        "extract_dir": "grails-$version"
     }
 }
