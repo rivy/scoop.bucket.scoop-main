@@ -4,15 +4,17 @@
     "license": "MIT",
     "architecture": {
         "64bit": {
-            "url": "https://winampplugins.co.uk/curl/curl_7_52_0_openssl_nghttp2_x64.7z",
-            "hash": "aeaba94333c65817760299f3ddb13992f0ba79a71e19fc81504462788ebc705d"
+            "url": "https://bintray.com/vszakats/generic/download_file?file_path=curl-7.52.1-win64-mingw.7z#/curl-7.52.1-win64-mingw.7z",
+            "hash": "e1c8136819d9424b864d64f6f87e413c41a57257af605d043d32eda9d04bb3b3",
+            "extract_dir": "curl-7.52.1-win64-mingw"
         },
         "32bit": {
-            "url": "https://winampplugins.co.uk/curl/curl_7_52_0_openssl_nghttp2_x86.7z",
-            "hash": "e93d07bc54a7909af7533d829605668c98667153646fe5109222b69a0dd050fc"
+            "url": "https://bintray.com/vszakats/generic/download_file?file_path=curl-7.52.1-win32-mingw.7z#/curl-7.52.1-win32-mingw.7z",
+            "hash": "b6ae69ca228085657a1092c73c149e7132149feec077bf9426e692ac985b4124",
+            "extract_dir": "curl-7.52.1-win32-mingw"
         }
     },
-    "bin": "curl.exe",
+    "bin": "bin\\curl.exe",
     "checkver": {
         "url": "https://curl.haxx.se/download.html",
         "re": "curl ([\\d.]+)"
@@ -20,10 +22,12 @@
     "autoupdate": {
         "architecture": {
             "64bit": {
-                "url": "https://winampplugins.co.uk/curl/curl_$underscoreVersion_openssl_nghttp2_x64.7z"
+                "url": "https://bintray.com/vszakats/generic/download_file?file_path=curl-$version-win64-mingw.7z#/curl-$version-win64-mingw.7z",
+                "extract_dir": "curl-$version-win64-mingw"
             },
             "32bit": {
-                "url": "https://winampplugins.co.uk/curl/curl_$underscoreVersion_openssl_nghttp2_x86.7z"
+                "url": "https://bintray.com/vszakats/generic/download_file?file_path=curl-$version-win32-mingw.7z#/curl-$version-win32-mingw.7z",
+                "extract_dir": "curl-$version-win32-mingw"
             }
         }
     }
