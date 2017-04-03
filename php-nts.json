@@ -4,19 +4,43 @@
     "license": "http://www.php.net/license/",
     "architecture": {
         "64bit": {
-            "url": "http://windows.php.net/downloads/releases/php-7.1.3-Win32-VC14-x64.zip",
-            "hash": "sha1:383c79286a3ab143388d12ba89a9e3418796fa4f"
+            "url": "http://windows.php.net/downloads/releases/php-7.1.3-nts-Win32-VC14-x64.zip",
+            "hash": "sha1:4000132114cecdec82c83b09aed6a962ed928e0b"
         },
         "32bit": {
-            "url": "http://windows.php.net/downloads/releases/php-7.1.3-Win32-VC14-x86.zip",
-            "hash": "sha1:eb751a2341dd2f7fea6e658368c86f7689c3a716"
+            "url": "http://windows.php.net/downloads/releases/php-7.1.3-nts-Win32-VC14-x86.zip",
+            "hash": "sha1:d7089c0d342a663ffea1a4e5973ef55b3b4b8ba8"
         }
     },
     "bin": [
         "php.exe",
         "php-cgi.exe"
     ],
-    "post_install": "cp \"$dir\\php.ini-production\" \"$dir\\php.ini\"",
+    "persist": [
+        "cli",
+        [
+            "php.ini-production",
+            "cli\\php.ini"
+        ]
+    ],
+    "env_set": {
+        "PHP_INI_SCAN_DIR": "$dir\\cli;$dir\\cli\\conf.d;"
+    },
+    "post_install": "
+# Copy ini scan dir from old location before persistent update
+if ((Test-Path \"$dir\\..\\conf\") -and !(Test-Path \"$dir\\cli\\conf.d\")) {
+    Write-Host -ForegroundColor Cyan \"We are moving your php configuration to $dir\\cli\\conf.d\"
+    Move-Item \"$dir\\..\\conf\" \"$dir\\cli\\conf.d\"
+}
+
+# Create directory for custom PHP configuration
+if (!(Test-Path \"$dir\\cli\\conf.d\")) {
+    (New-Item -Type directory \"$dir\\cli\\conf.d\") | Out-Null
+}
+
+# Enable extensions to be found in installation-relative folder (the default is to search C:/php)
+(gc \"$dir\\cli\\php.ini\") | % { $_ -replace '; extension_dir = \"ext\"', 'extension_dir = \"ext\"' } | sc \"$dir\\cli\\php.ini\"
+",
     "checkver": {
         "url": "http://windows.php.net/download/",
         "re": "<h3 id=\"php-7.1\".*?>.*?\\(([\\d.]+)\\)</h3>"
@@ -24,10 +48,10 @@
     "autoupdate": {
         "architecture": {
             "64bit": {
-                "url": "http://windows.php.net/downloads/releases/php-$version-Win32-VC14-x64.zip"
+                "url": "http://windows.php.net/downloads/releases/php-$version-nts-Win32-VC14-x64.zip"
             },
             "32bit": {
-                "url": "http://windows.php.net/downloads/releases/php-$version-Win32-VC14-x86.zip"
+                "url": "http://windows.php.net/downloads/releases/php-$version-nts-Win32-VC14-x86.zip"
             }
         },
         "hash": {
@@ -36,5 +60,10 @@
             "url": "http://windows.php.net/downloads/releases/sha1sum.txt",
             "find": "([a-z0-9]{40})\\s+(?:$basename)"
         }
+    },
+    "suggest": {
+        "vcredist": [
+            "extras/vcredist2017"
+        ]
     }
 }
