@@ -77,7 +77,7 @@ use Term::ANSIColor; $Term::ANSIColor::EACHLINE = "\n"; $^O eq 'MSWin32' && eval
 BEGIN {
 use Module::CoreList;
 my $ME = do {$_ = (File::Spec->splitpath($0))[2]; s/(?<=.)\.[^.]*$//; $_};
-my @modules = qw[ DateTime::Format::Flexible Config::General PadWalker Data::Dump DateTime::HiRes Log::Any Log::Any::Adapter Log::Any::Adapter::Dispatch Log::Dispatch File::chdir IPC::Run3 Path::Iterator::Rule Path::Tiny ];
+my @modules = qw[ DateTime::Format::Flexible Config::General PadWalker Data::Dump Log::Any Log::Any::Adapter Log::Any::Adapter::Dispatch Log::Dispatch File::chdir IPC::Run3 Path::Iterator::Rule Path::Tiny ];
 my @missing_modules = qw();
 foreach my $module (@modules) {
     if (not eval "require $module; 1;") { push @missing_modules, $module; }
@@ -121,7 +121,7 @@ if ($^O eq 'MSWin32' && defined $ENV{LOCALAPPDATA}) { @log_dir_default_locations
 my $log_file = path(List::Util::first { -e path($_)->child(q{.}) } @log_dir_default_locations)->child("$ME.log");
 
 my $s_colorize = sub { my %p = @_; return colorize($p{level}, $p{message}) };
-my $s_prefix_timestamp = sub { use DateTime::HiRes; my %p = @_; return '['.DateTime::HiRes->now->set_time_zone('local')->strftime('%FT%H:%M:%S.%3N%z').'] '.$p{message} };
+my $s_prefix_timestamp = sub { use DateTime; use Time::HiRes; my %p = @_; return '['.DateTime->from_epoch(epoch=>Time::HiRes::time)->set_time_zone('local')->strftime('%FT%H:%M:%S.%3N%z').'] '.$p{message} };
 my $s_prefix_ME = sub { my %p = @_; return $ME.': '.$p{message} };
 my $s_prefix_id = sub { my %p = @_; return "$ME ($PID)".': '.$p{message} };
 my $s_prefix_level = sub { my %p = @_; return (uc $p{level}).': '.$p{message} };
