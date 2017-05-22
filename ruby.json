@@ -25,9 +25,15 @@
             "extract_dir": "ruby-2.3.3-i386-mingw32"
         }
     },
-    "extract_to": [ "", "devkit" ],
+    "extract_to": [
+        "",
+        "devkit"
+    ],
     "persist": "gems",
-    "env_add_path": [ "bin", "gems\\bin" ],
+    "env_add_path": [
+        "bin",
+        "gems\\bin"
+    ],
     "env_set": {
         "GEM_HOME": "$dir\\gems",
         "GEM_PATH": "$dir\\gems"
@@ -35,6 +41,6 @@
     "post_install": "pushd $dir\\devkit;echo \"---`n- $dir\" | out-file config.yml -enc default; ruby dk.rb install;popd;",
     "checkver": {
         "url": "http://rubyinstaller.org/downloads/",
-        "re": "<li class=\"exe\"><a.*?>Ruby ([0-9\\.p-]+)</a></li>"
+        "re": "ruby-([\\d.]+)-x64-mingw32.7z"
     }
 }
