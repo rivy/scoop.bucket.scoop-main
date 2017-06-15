@@ -1,25 +1,32 @@
 {
     "homepage": "https://github.com/coreybutler/nvm-windows",
-    "version": "1.1.4",
-    "url": "https://github.com/coreybutler/nvm-windows/releases/download/1.1.4/nvm-noinstall.zip",
-    "extract_dir": "\\",
+    "version": "1.1.5",
+    "url": "https://github.com/coreybutler/nvm-windows/releases/download/1.1.5/nvm-noinstall.zip",
     "bin": [
-        "nvm.exe",
-        "elevate.cmd",
-        "elevate.vbs"
+        "nvm.exe"
     ],
-    "env_add_path": "nodejs",
+    "persist": [
+       "nodejs",
+        ["elevate.cmd", "nodejs\\elevate.cmd"],
+        ["elevate.vbs", "nodejs\\elevate.vbs"],
+        "settings.txt"
+    ],
+    "env_add_path": "nodejs\\nodejs",
     "env_set": {
         "NVM_HOME": "$dir",
-        "NVM_SYMLINK": "$dir\\nodejs"
+        "NVM_SYMLINK": "$persist_dir\\nodejs\\nodejs"
     },
-    "hash": "2cd5b7f4faeb59036280af45876b29d2f6256c5af6fa43d21e8b4fe54c12b59e",
+    "hash": "cbe1b6d71cc420f2d4428e4b7d41b8eb409232706385b2e97f2b749228e370bc",
     "architecture": {
         "64bit": {
-            "post_install": "\"root: $dir `r`narch: 64 `r`nproxy: none `r`noriginalpath: `r`noriginalversion: `r`n\" | Out-File -encoding \"ASCII\" $dir\\settings.txt"
+            "pre_install": "if(!(test-path \"$dir\\settings.txt\")) {
+                write-output \"root: $persist_dir\\nodejs`r`narch: 64`r`nproxy: none\" | Out-File -encoding \"ASCII\" $dir\\settings.txt
+            }"
         },
         "32bit": {
-            "post_install": "\"root: $dir `r`narch: 32 `r`nproxy: none `r`noriginalpath: `r`noriginalversion: `r`n\" | Out-File -encoding \"ASCII\" $dir\\settings.txt"
+            "pre_install": "if(!(test-path \"$dir\\settings.txt\")) {
+                write-output \"root: $persist_dir\\nodejs`r`narch: 32`r`nproxy: none\" | Out-File -encoding \"ASCII\" $dir\\settings.txt
+            }"
         }
     },
     "notes": "You'll need to restart powershell/cmd to have it reload Environment Variables so nvm will work correctly",
