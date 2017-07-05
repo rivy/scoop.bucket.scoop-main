@@ -1,0 +1,36 @@
+{
+    "homepage": "https://syncthing.net/",
+    "license": "MPL-2.0",
+    "version": "0.14.31",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/syncthing/syncthing/releases/download/v0.14.31/syncthing-windows-amd64-v0.14.31.zip",
+            "hash": "83337ec56b17c77ef7014ce00b73a198ae180b589d3a71d2f4b2408eca51cb4d",
+            "extract_dir": "syncthing-windows-amd64-v0.14.31"
+        },
+        "32bit": {
+            "url": "https://github.com/syncthing/syncthing/releases/download/v0.14.31/syncthing-windows-386-v0.14.31.zip",
+            "hash": "c1c59d77c49eadb9abd47e26d4acd5a59101c96ff7169fc45a88e000d6dfe877",
+            "extract_dir": "syncthing-windows-386-v0.14.31"
+        }
+    },
+    "bin": "syncthing.exe",
+    "checkver": {
+        "github": "https://github.com/syncthing/syncthing"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/syncthing/syncthing/releases/download/v$version/syncthing-windows-amd64-v$version.zip",
+                "extract_dir": "syncthing-windows-amd64-v$version"
+            },
+            "32bit": {
+                "url": "https://github.com/syncthing/syncthing/releases/download/v$version/syncthing-windows-386-v$version.zip",
+                "extract_dir": "syncthing-windows-386-v$version"
+            }
+        },
+        "hash": {
+            "url": "https://github.com/syncthing/syncthing/releases/download/v$version/sha256sum.txt.asc"
+        }
+    }
+}
