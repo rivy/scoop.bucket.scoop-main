@@ -1,0 +1,66 @@
+{
+    "homepage": "http://windows.php.net",
+    "version": "7.1.6",
+    "license": "https://php.net/license/",
+    "architecture": {
+        "64bit": {
+            "url": "http://windows.php.net/downloads/releases/php-7.1.6-nts-Win32-VC14-x64.zip",
+            "hash": "dcd1ba9b3bc70b68bf61c600174e1c356dcafb49b6b5896e14d5d537c39fb888"
+        },
+        "32bit": {
+            "url": "http://windows.php.net/downloads/releases/php-7.1.6-nts-Win32-VC14-x86.zip",
+            "hash": "b61c6c9bf42106f9278c4948d6eabb7336869b172660d4915b39f610d161a81c"
+        }
+    },
+    "bin": [
+        "php.exe",
+        "php-cgi.exe"
+    ],
+    "persist": [
+        "cli",
+        [
+            "php.ini-production",
+            "cli\\php.ini"
+        ]
+    ],
+    "env_set": {
+        "PHP_INI_SCAN_DIR": "$dir\\cli;$dir\\cli\\conf.d;"
+    },
+    "post_install": "
+# Copy ini scan dir from old location before persistent update
+if ((Test-Path \"$dir\\..\\conf\") -and !(Test-Path \"$dir\\cli\\conf.d\")) {
+    Write-Host -ForegroundColor Cyan \"We are moving your php configuration to $dir\\cli\\conf.d\"
+    Move-Item \"$dir\\..\\conf\" \"$dir\\cli\\conf.d\"
+}
+
+# Create directory for custom PHP configuration
+if (!(Test-Path \"$dir\\cli\\conf.d\")) {
+    (New-Item -Type directory \"$dir\\cli\\conf.d\") | Out-Null
+}
+
+# Enable extensions to be found in installation-relative folder (the default is to search C:/php)
+(gc \"$dir\\cli\\php.ini\") | % { $_ -replace '; extension_dir = \"ext\"', 'extension_dir = \"ext\"' } | sc \"$dir\\cli\\php.ini\"
+",
+    "checkver": {
+        "url": "http://windows.php.net/download/",
+        "re": "<h3 id=\"php-7.1\".*?>.*?\\(([\\d.]+)\\)</h3>"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "http://windows.php.net/downloads/releases/php-$version-nts-Win32-VC14-x64.zip"
+            },
+            "32bit": {
+                "url": "http://windows.php.net/downloads/releases/php-$version-nts-Win32-VC14-x86.zip"
+            }
+        },
+        "hash": {
+            "url": "$baseurl/sha256sum.txt"
+        }
+    },
+    "suggest": {
+        "vcredist": [
+            "extras/vcredist2017"
+        ]
+    }
+}
