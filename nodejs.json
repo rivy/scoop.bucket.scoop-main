@@ -1,17 +1,17 @@
 {
     "homepage": "https://nodejs.org",
-    "version": "8.1.4",
+    "version": "8.2.1",
     "license": "MIT",
     "architecture": {
         "64bit": {
-            "url": "https://nodejs.org/dist/v8.1.4/node-v8.1.4-win-x64.7z",
-            "hash": "2b3fb42499480f2c1633f9b0e14a9efdb37d8fad0c06642fe9a9ef13f943847b",
-            "extract_dir": "node-v8.1.4-win-x64"
+            "url": "https://nodejs.org/dist/v8.2.1/node-v8.2.1-win-x64.7z",
+            "hash": "1d4709a568ce470f968bef7da4141e071a141474306da55ed00e129d68ef2b39",
+            "extract_dir": "node-v8.2.1-win-x64"
         },
         "32bit": {
-            "url": "https://nodejs.org/dist/v8.1.4/node-v8.1.4-win-x86.7z",
-            "hash": "98d0ffc55c53084d095255242b42378b94260e3fb8410e1a6ec43d5df726a471",
-            "extract_dir": "node-v8.1.4-win-x86"
+            "url": "https://nodejs.org/dist/v8.2.1/node-v8.2.1-win-x86.7z",
+            "hash": "91494c1f4c514770113ccae9069077d567579d0ad7d65547ba32a5682d1d7ffb",
+            "extract_dir": "node-v8.2.1-win-x86"
         }
     },
     "persist": [
@@ -28,7 +28,7 @@
     ",
     "checkver": {
         "url": "https://nodejs.org/en/download/current/",
-        "re": "Current version: <strong>v([\\d.]+)</strong>"
+        "re": "Current Version: <strong>v([\\d.]+)</strong>"
     },
     "autoupdate": {
         "architecture": {
