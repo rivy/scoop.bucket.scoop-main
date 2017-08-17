@@ -1,15 +1,15 @@
 {
     "homepage": "https://qemu.weilnetz.de/",
     "license": "GPL-2.0",
-    "version": "2.10.0-rc1",
+    "version": "2.10.0-rc3",
     "architecture": {
         "64bit": {
-            "url": "https://qemu.weilnetz.de/w64/2017/qemu-w64-setup-20170804.exe#/dl.7z",
-            "hash": "sha512:f7c6e88640dffc6c4cd585fbd53cbbcbc4c9431ea6a7def1e5d4290d122f39dd16895b66a02d9ad38f0f6661cf984a74c3e0bd844170a62873277b003b61dcce"
+            "url": "https://qemu.weilnetz.de/w64/qemu-w64-setup-20170816.exe#/dl.7z",
+            "hash": "sha512:d379c56a6cdd1503fa8aa1030d6fbb3655e4da07e3bb89ae123f8facf1e58b9f1adeb56bf99dc01e802d921d87b92983011d6eac2dc9b54a805a10afdd6f9fc7"
         },
         "32bit": {
-            "url": "https://qemu.weilnetz.de/w32/2017/qemu-w32-setup-20170804.exe#/dl.7z",
-            "hash": "sha512:b8ff08157af037c5785c82168295d922e44fc9f5dad822826b25294f69475f3938c45d84ac5a0f44cdde276b8b6a2eba912c26cf729b28aac689b1d7eb30b656"
+            "url": "https://qemu.weilnetz.de/w32/qemu-w32-setup-20170816.exe#/dl.7z",
+            "hash": "sha512:c348972b7269e6e08b2c12e6053295f23e3930c3a40bc6d4ab69a438531a648ccd5bd87eaace7b9d4761770d5cc2687fe81657ea72e7309185ba3a1e4e5b6d8d"
         }
     },
     "bin": [
@@ -80,15 +80,15 @@
     "autoupdate": {
         "architecture": {
             "64bit": {
-                "url": "https://qemu.weilnetz.de/w64/$matchYear/qemu-w64-setup-$matchYear$matchMonth$matchDay.exe#/dl.7z",
+                "url": "https://qemu.weilnetz.de/w64/qemu-w64-setup-$matchYear$matchMonth$matchDay.exe#/dl.7z",
                 "hash": {
-                    "url": "https://qemu.weilnetz.de/w64/$matchYear/qemu-w64-setup-$matchYear$matchMonth$matchDay.sha512"
+                    "url": "https://qemu.weilnetz.de/w64/qemu-w64-setup-$matchYear$matchMonth$matchDay.sha512"
                 }
             },
             "32bit": {
-                "url": "https://qemu.weilnetz.de/w32/$matchYear/qemu-w32-setup-$matchYear$matchMonth$matchDay.exe#/dl.7z",
+                "url": "https://qemu.weilnetz.de/w32/qemu-w32-setup-$matchYear$matchMonth$matchDay.exe#/dl.7z",
                 "hash": {
-                    "url": "https://qemu.weilnetz.de/w32/$matchYear/qemu-w32-setup-$matchYear$matchMonth$matchDay.sha512"
+                    "url": "https://qemu.weilnetz.de/w32/qemu-w32-setup-$matchYear$matchMonth$matchDay.sha512"
                 }
             }
         }
