@@ -281,7 +281,7 @@ $log->info( 'Repository updated'.(($updated_repo_id eq $initial_repo_id) ? ' (no
 $code_timing{update_repo}{stop} = Benchmark->new;
 
 $code_timing{update_mirror}{start} = Benchmark->new;
-$log->debug( 'Updating mirror submodule ... started' );
+$log->debug( 'Update mirror submodule ... started' );
 my ($initial_mirror_id, $updated_mirror_id);
 my $last_mirror_commit_date;
 my $mirror_commit_date;
@@ -320,7 +320,7 @@ $code_timing{update_mirror}{stop} = Benchmark->new;
 my @files;
 
 # erase all repo files except ., .., .git*, .#mirror, and the directory containing this script
-$code_timing{clean_repo}{start} = Benchmark->new;
+$code_timing{scrub_repo}{start} = Benchmark->new;
 $log->debug( 'Cleaning repository ... started' );
 @files = grep { !/(?:\.|\.\.|\.git.*|\.#mirror)$/ and index($ME_dir->absolute, $_) != 0 } File::Glob::glob $repo_path->absolute.'/{.,}*';
 my $no_removed_dirs = 0;
@@ -328,8 +328,8 @@ foreach my $file (@files) {
     $ARGV{trace} && $log->trace( 'removing '.$file );
     -d $file and do {path($file)->remove_tree; $no_removed_dirs++} or path($file)->remove;
 }
-$log->infof( 'Repository cleaned (%s file%s, including %s director%s, removed)', scalar(@files), (scalar(@files) == 1 ? '':'s'), $no_removed_dirs, ($no_removed_dirs == 1 ? 'y':'ies') );
-$code_timing{clean_repo}{stop} = Benchmark->new;
+$log->infof( 'Repository scrubbed (%s file%s, including %s director%s, removed)', scalar(@files), (scalar(@files) == 1 ? '':'s'), $no_removed_dirs, ($no_removed_dirs == 1 ? 'y':'ies') );
+$code_timing{scrub_repo}{stop} = Benchmark->new;
 
 my $file_rule;
 my $source_dir;
