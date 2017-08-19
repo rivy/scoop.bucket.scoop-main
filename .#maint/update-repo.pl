@@ -260,6 +260,26 @@ $ARGV{trace} && $log->trace( dump_var(qw(%color)) );
 # $log->warn('warning text');
 # $log->error('error text');
 
+my $output;
+
+$code_timing{update_repo}{start} = Benchmark->new;
+$log->debug( 'Clean and update repository ... started' );
+my $repo_branch;
+my ($initial_repo_id, $updated_repo_id);
+{
+    local $CWD = $repo_path;  # NOTE: must be absolute path if changing between volumes (eg, `File::Spec->rel2abs($mirror_path)`)?; ToDO: add issue noting *intermittant* GPF when chdir from 'd:\...' to 'c:\...' unless target is absolute path @ https://github.com/dagolden/File-chdir/issues
+    # NOTE: `D:\...>perl -e "use File::chdir; { local $CWD='C:..\\.mirror'; };"` DOESN'T reproduce the issue
+    chomp( $repo_branch = Term::ANSIColor::colorstrip(`git rev-parse --abbrev-ref HEAD`) );
+    chomp( $initial_repo_id = Term::ANSIColor::colorstrip( `git describe --all --long --always` ) );
+    $log->debug( dump_var( q{$initial_repo_id} ) );
+    $output = Term::ANSIColor::colorstrip(`git clean -fd`); $ARGV{trace} && $log->trace( $output );
+    $output = Term::ANSIColor::colorstrip(`git pull --quiet`); $ARGV{trace} && $log->trace( $output );
+    chomp( $updated_repo_id = Term::ANSIColor::colorstrip(`git describe --all --long --always`) );
+    $log->debug( dump_var( q{$updated_repo_id} ) );
+}
+$log->info( 'Repository updated'.(($updated_repo_id eq $initial_repo_id) ? ' (no changes)':q{}) );
+$code_timing{update_repo}{stop} = Benchmark->new;
+
 $code_timing{update_mirror}{start} = Benchmark->new;
 $log->debug( 'Updating mirror submodule ... started' );
 my ($initial_mirror_id, $updated_mirror_id);
@@ -267,7 +287,6 @@ my $last_mirror_commit_date;
 my $mirror_commit_date;
 my $interval_log;
 my $interval_log_summary;
-my $output;
 {
     local $CWD = $mirror_path;  # NOTE: must be absolute path if changing between volumes (eg, `File::Spec->rel2abs($mirror_path)`)?; ToDO: add issue noting *intermittant* GPF when chdir from 'd:\...' to 'c:\...' unless target is absolute path @ https://github.com/dagolden/File-chdir/issues
     # NOTE: `D:\...>perl -e "use File::chdir; { local $CWD='C:..\\.mirror'; };"` DOESN'T reproduce the issue
