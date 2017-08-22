@@ -63,8 +63,21 @@ use English;
 
 use version 0.77 (); our $VERSION = version->qv('0.1_0'); # VERSION: major.minor.release[.build]]
 
-use Benchmark ':hireswallclock';
-our %code_timing; BEGIN { $code_timing{code}{start} = $code_timing{load_modules}{start} = Benchmark->new; }
+BEGIN { my %timers; sub mark {
+    return if not eval { use Benchmark ':hireswallclock'; 1 };
+    return (wantarray ? %timers : \%timers) if wantarray;
+    if (defined (my $name = shift)) { my $timer_ref = ($timers{$name} ||= {});
+        ${$timer_ref}{stop} = ${$timer_ref}{start} ? ( ${$timer_ref}{stop} ||= Benchmark->new ) : 0;
+        ${$timer_ref}{start} ||= Benchmark->new;
+        ${$timer_ref}{diff}{raw} = ${$timer_ref}{stop} ? ( ${$timer_ref}{diff}{raw} ||= Benchmark::timediff(${$timer_ref}{stop},${$timer_ref}{start}) ) : 0;
+        if (${$timer_ref}{diff}{raw}) { my @times = @{${$timer_ref}{diff}{raw}}; ${$timer_ref}{diff}{calc} = [ $times[0], $times[1]+$times[3], $times[2]+$times[4], $times[1]+$times[3]+$times[2]+$times[4] ]; }
+        ${$timer_ref}{duration} = ${$timer_ref}{diff}{raw} ? ( ${$timer_ref}{duration} ||=  sprintf '%0.6f wallclock secs (%0.3f usr + %0.3f sys = %0.3f CPU)', @{${$timer_ref}{diff}{calc}} ) : 0;
+        }
+    return;
+}}
+BEGIN { mark('*total') }
+BEGIN { mark('init') }
+BEGIN { mark('init:load_modules'); }
 
 use File::Glob;
 use File::Spec;
@@ -99,12 +112,11 @@ use Log::Dispatch;
 use Path::Iterator::Rule;
 use Path::Tiny;
 
-$code_timing{load_modules}{stop} = Benchmark->new;
+mark('init:load_modules');
 
 ###
 
-$code_timing{init_logging}{start} = Benchmark->new;
-
+mark('init:logging');
 my $ME = path($0)->basename(qr/(?<=.)\.[^.]*/);
 my $ME_dir = path($0)->parent;
 
@@ -141,11 +153,11 @@ my $dispatcher = Log::Dispatch->new(
 Log::Any::Adapter->set('Dispatch', dispatcher => $dispatcher );
 
 $log->debug('*** starting');
-$code_timing{init_logging}{stop} = Benchmark->new;
+mark('init:logging');
 
 ###
 
-$code_timing{init}{start} = Benchmark->new;
+mark('init:variables');
 $log->debug('initializing');
 
 my $repo_path = $ME_dir->parent;
@@ -156,13 +168,15 @@ my $in_repo_dest = '.';
 
 my $commit_summary_length = 80;
 
-$code_timing{init}{stop} = Benchmark->new;
+mark('init:variables');
 
 ###
 
-$code_timing{args_opts}{start} = Benchmark->new;
+mark('init:args_opts');
 
 @ARGV = Win32::CommandLine::argv() if eval { require Win32::CommandLine };
+
+{ my @ARGV = @ARGV; $ARGV{trace} && $log->trace( dump_var( q{@ARGV} ) ); }
 
 # options
 my %ARGV = ();
@@ -228,7 +242,8 @@ if (!$colorize) { %color = () };
 
 #
 
-$code_timing{args_opts}{stop} = Benchmark->new;
+mark('init:args_opts');
+mark('init');
 
 # * help / usage
 pod2usage(-verbose => 99, -sections => '__NONE__', -message => "$ME $::VERSION") if $ARGV{'version'};
@@ -262,7 +277,8 @@ $ARGV{trace} && $log->trace( dump_var(qw(%color)) );
 
 my $output;
 
-$code_timing{update_repo}{start} = Benchmark->new;
+mark('network_down');
+mark('network_down:update_repo');
 $log->debug( 'Clean and update repository ... started' );
 my $repo_branch;
 my ($initial_repo_id, $updated_repo_id);
@@ -283,9 +299,9 @@ my $repo_updated = 0;
 $repo_updated = ($updated_repo_id ne $initial_repo_id);
 $log->debug( dump_var( q{$repo_updated} ) );
 $log->info( 'Repository'.($repo_updated ? ' changes pulled from origin remote':' already up-to-date with origin remote') );
-$code_timing{update_repo}{stop} = Benchmark->new;
+mark('network_down:update_repo');
 
-$code_timing{update_mirror}{start} = Benchmark->new;
+mark('network_down:update_mirror');
 $log->debug( 'Update mirror submodule ... started' );
 my ($initial_mirror_id, $updated_mirror_id);
 my $mirror_updated = 0;
@@ -323,102 +339,121 @@ my $interval_log_summary = q//;
     $log->debug( dump_var( q{$mirror_commit_date} ) );
 }
 $log->info( 'Mirror submodule'.($mirror_updated ? ' changes pulled from upstream remote':' already up-to-date with upstream remote') );
-$code_timing{update_mirror}{stop} = Benchmark->new;
+mark('network_down:update_mirror');
+mark('network_down');
 
-my @files;
-
-# erase all repo files except ., .., .git*, .#mirror, and the directory containing this script
-$code_timing{scrub_repo}{start} = Benchmark->new;
-$log->debug( 'Cleaning repository ... started' );
-@files = grep { !/(?:\.|\.\.|\.git.*|\.#mirror)$/ and index($ME_dir->absolute, $_) != 0 } File::Glob::glob $repo_path->absolute.'/{.,}*';
-my $no_removed_dirs = 0;
-foreach my $file (@files) {
-    $ARGV{trace} && $log->trace( 'removing '.$file );
-    -d $file and do {path($file)->remove_tree; $no_removed_dirs++} or path($file)->remove;
-}
-$log->infof( 'Repository scrubbed (%s file%s, including %s director%s, removed)', scalar(@files), (scalar(@files) == 1 ? q//:'s'), $no_removed_dirs, ($no_removed_dirs == 1 ? 'y':'ies') );
-$code_timing{scrub_repo}{stop} = Benchmark->new;
-
-my $file_rule;
-my $source_dir;
-
-# copy all files recursively from $mirror_source (default == $mirror_path) ignoring .git* files to REPO_DIR (default == '.')
-$code_timing{copy_mirror}{start} = Benchmark->new;
-$log->debug( 'Copying from mirror ... started' );
-$file_rule = Path::Iterator::Rule->new->file;
-$source_dir = path($mirror_path)->child($in_mirror_source);
-@files = $file_rule->all( $source_dir, {relative => 1} );
-foreach my $file (@files) {
-    # # copy
-    my $t = $repo_path->child(path($file));
-    $ARGV{trace} && $log->trace( "$file => $t" );
-    $t->parent->mkpath;
-    $source_dir->child($file)->copy($repo_path->child(path($file)->child(q{.})));
-}
-$log->infof( 'Copied %s file%s from mirror submodule into repository', scalar(@files), (scalar(@files) == 1 ? q//:'s') );
-$code_timing{copy_mirror}{stop} = Benchmark->new;
-
-# copy .#maint/file_overrides/* to REPO_DIR (rename any collisions as filename.(mirror).ext)
-## $source_dir = (($ME_dir, relative to $repo_path) => 1st topmost dir); $src = $source_dir/README*
-$code_timing{copy_overrides}{start} = Benchmark->new;
-$log->debug( 'Copying from overrides ... started' );
-$file_rule = Path::Iterator::Rule->new->file;
-$source_dir = path($ME_dir)->child('file-overrides');
-@files = $file_rule->all( $source_dir, {relative => 1} );
-my $no_renamed_files = 0;
-foreach my $file (@files) {
-    # # copy
-    my $t = $repo_path->child(path($file));
-    $ARGV{trace} && $log->trace( "$file => $t" );
-    $t->parent->mkpath;
-    if (-e $t) {
-        my $basename = $t->basename(qr/(?<=.)\.[^.]*/);
-        my $suffix = $t->basename; $suffix =~ s/^\Q$basename\E//;
-        my $new_name = $t->parent->child($basename.'.(mirror)'.$suffix);
-        $t->move($new_name);
-        $no_renamed_files++;
-        $ARGV{trace} && $log->trace( "file renamed ($t => $new_name)" );
-    }
-    $source_dir->child($file)->copy($repo_path->child(path($file)->child(q{.})));
-}
-$log->infof( 'Copied %d override file%s (renaming %s conflicting file%s)', scalar(@files), (scalar(@files) == 1 ? q//:'s'), $no_renamed_files, ($no_renamed_files == 1 ? q//:'s')  );
-$code_timing{copy_overrides}{stop} = Benchmark->new;
-
-if ( !$mirror_updated && $ARGV{force} ) {
-    $interval_log = '* forced commit; (no mirror changes)';
+if ( $mirror_updated || $ARGV{force} ) {
+    if ( !$mirror_updated ) {
+        $interval_log = '* forced commit; (no mirror changes)';
     }
 
-if ( $mirror_updated || $ARGV{force}) {
-    $log->debugf( 'Committing changes to repository %s... started', $mirror_updated ? '(forced) ':q// );
+    mark('io');
+    my @files;
 
-    local $CWD = $repo_path;  # NOTE: must be absolute path if changing between volumes (eg, `File::Spec->rel2abs($mirror_path)`)?; ToDO: add issue noting *intermittant* GPF when chdir from 'd:\...' to 'c:\...' unless target is absolute path @ https://github.com/dagolden/File-chdir/issues
-
-    my $tag = DateTime->now()->strftime('0.%Y.%m%d.%H%M');
-    my $tempfile = Path::Tiny->tempfile( TEMPLATE => "$ME.($PID).XXXXXXXX", SUFFIX => '.txt' );
-    my $fh = $tempfile->filehandle('>');
-
-    my $commit_summary = "update:($tag): $interval_log_summary";
-    if ((length $commit_summary) > $commit_summary_length) { my $elipsis='...'; $commit_summary = (substr $commit_summary, 0, $commit_summary_length-(length $elipsis)) . $elipsis; }
-
-    my $commit_msg = "$commit_summary\n\n* mirror of github.com/lukesampson/scoop:bucket (\"main\")".(($interval_log ne q//) ? "\n\n.# Summary (changes by commit)\n\n$interval_log":q//);
-
-    $ARGV{trace} && $log->trace( dump_var('$commit_msg') );
-
-    print $fh $commit_msg;
-
-    $log->debug( dump_var(q/$tag/) );
-    $log->debug( dump_var(q/$tempfile/) );
-
-    $output = Term::ANSIColor::colorstrip(`git add -A .`); $ARGV{trace} && $log->trace( $output );
-    $output = Term::ANSIColor::colorstrip(`git commit --quiet --file="$tempfile"`); $ARGV{trace} && $log->trace( $output );
-    $output = Term::ANSIColor::colorstrip(`git tag "$tag"`); $ARGV{trace} && $log->trace( $output );
-
-    $log->info( 'Update committed to repository' );
+    # erase all repo files except ., .., .git*, .#mirror, and the directory containing this script
+    mark('io:scrub_repo');
+    $log->debug( 'Cleaning repository ... started' );
+    @files = grep { !/(?:\.|\.\.|\.git.*|\.#mirror)$/ and index($ME_dir->absolute, $_) != 0 } File::Glob::glob $repo_path->absolute.'/{.,}*';
+    my $no_removed_dirs = 0;
+    foreach my $file (@files) {
+        $ARGV{trace} && $log->trace( 'removing '.$file );
+        -d $file and do {path($file)->remove_tree; $no_removed_dirs++} or path($file)->remove;
     }
+    $log->infof( 'Repository scrubbed (%s file%s, including %s director%s, removed)', scalar(@files), (scalar(@files) == 1 ? q//:'s'), $no_removed_dirs, ($no_removed_dirs == 1 ? 'y':'ies') );
+    mark('io:scrub_repo');
+
+    my $file_rule;
+    my $source_dir;
+
+    # copy all files recursively from $mirror_source (default == $mirror_path) ignoring .git* files to REPO_DIR (default == '.')
+    mark('io:copy_mirror');
+    $log->debug( 'Copying from mirror ... started' );
+    $file_rule = Path::Iterator::Rule->new->file;
+    $source_dir = path($mirror_path)->child($in_mirror_source);
+    @files = $file_rule->all( $source_dir, {relative => 1} );
+    foreach my $file (@files) {
+        # # copy
+        my $t = $repo_path->child(path($file));
+        $ARGV{trace} && $log->trace( "$file => $t" );
+        $t->parent->mkpath;
+        $source_dir->child($file)->copy($repo_path->child(path($file)->child(q{.})));
+    }
+    $log->infof( 'Copied %s file%s from mirror submodule into repository', scalar(@files), (scalar(@files) == 1 ? q//:'s') );
+    mark('io:copy_mirror');
+
+    # copy .#maint/file_overrides/* to REPO_DIR (rename any collisions as filename.(mirror).ext)
+    ## $source_dir = (($ME_dir, relative to $repo_path) => 1st topmost dir); $src = $source_dir/README*
+    mark('io:copy_overrides');
+    $log->debug( 'Copying from overrides ... started' );
+    $file_rule = Path::Iterator::Rule->new->file;
+    $source_dir = path($ME_dir)->child('file-overrides');
+    @files = $file_rule->all( $source_dir, {relative => 1} );
+    my $no_renamed_files = 0;
+    foreach my $file (@files) {
+        # # copy
+        my $t = $repo_path->child(path($file));
+        $ARGV{trace} && $log->trace( "$file => $t" );
+        $t->parent->mkpath;
+        if (-e $t) {
+            my $basename = $t->basename(qr/(?<=.)\.[^.]*/);
+            my $suffix = $t->basename; $suffix =~ s/^\Q$basename\E//;
+            my $new_name = $t->parent->child($basename.'.(mirror)'.$suffix);
+            $t->move($new_name);
+            $no_renamed_files++;
+            $ARGV{trace} && $log->trace( "file renamed ($t => $new_name)" );
+        }
+        $source_dir->child($file)->copy($repo_path->child(path($file)->child(q{.})));
+    }
+    $log->infof( 'Copied %d override file%s (renaming %s conflicting file%s)', scalar(@files), (scalar(@files) == 1 ? q//:'s'), $no_renamed_files, ($no_renamed_files == 1 ? q//:'s')  );
+    mark('io:copy_overrides');
+    mark('io');
+
+    mark('network_up');
+    if ( $mirror_updated || $ARGV{force}) {
+        $log->debugf( 'Committing changes to repository %s... started', $mirror_updated ? '(forced) ':q// );
+
+        local $CWD = $repo_path;  # NOTE: must be absolute path if changing between volumes (eg, `File::Spec->rel2abs($mirror_path)`)?; ToDO: add issue noting *intermittant* GPF when chdir from 'd:\...' to 'c:\...' unless target is absolute path @ https://github.com/dagolden/File-chdir/issues
+
+        my $tag = DateTime->now()->strftime('0.%Y.%m%d.%H%M');
+        my $tempfile = Path::Tiny->tempfile( TEMPLATE => "$ME.($PID).XXXXXXXX", SUFFIX => '.txt' );
+        my $fh = $tempfile->filehandle('>');
+
+        my $commit_summary = "update:($tag): $interval_log_summary";
+        if ((length $commit_summary) > $commit_summary_length) { my $elipsis='...'; $commit_summary = (substr $commit_summary, 0, $commit_summary_length-(length $elipsis)) . $elipsis; }
+
+        my $commit_msg = "$commit_summary\n\n* mirror of github.com/lukesampson/scoop:bucket (\"main\")".(($interval_log ne q//) ? "\n\n.# Summary (changes by commit)\n\n$interval_log":q//);
+
+        $ARGV{trace} && $log->trace( dump_var('$commit_msg') );
+
+        print $fh $commit_msg;
+
+        $log->debug( dump_var(q/$tag/) );
+        $log->debug( dump_var(q/$tempfile/) );
+
+        $output = Term::ANSIColor::colorstrip(`git add -A .`); $ARGV{trace} && $log->trace( $output );
+        $output = Term::ANSIColor::colorstrip(`git commit --quiet --file="$tempfile"`); $ARGV{trace} && $log->trace( $output );
+        $output = Term::ANSIColor::colorstrip(`git tag "$tag"`); $ARGV{trace} && $log->trace( $output );
+
+        $log->info( 'Update committed to repository' );
+    }
+    mark('network_up');
+}
 
 $log->debug('normal completion');
-$code_timing{code}{stop} = Benchmark->new;
-$log->info('duration: '.Benchmark::timestr( Benchmark::timediff($code_timing{code}{stop},$code_timing{code}{start})) );
+
+mark('*total');
+# ref: http://perlmaven.com/how-to-sort-a-hash-in-perl @@ https://archive.is/mtrNc
+my %timers = mark();
+if (%timers) {
+    foreach (sort { $timers{$a}{start}->real <=> $timers{$b}{start}->real or $a cmp $b } keys %timers) {
+        if ( m/^.*?:/msx ) {
+            $ARGV{trace} && $log->tracef( 'duration (%s): '.$timers{$_}{duration}, $_ );
+        } else {
+            $log->debugf( 'duration (%s): '.$timers{$_}{duration}, $_ );
+            }
+        }
+    $log->infof( 'duration: '.$timers{'*total'}{duration} );
+    };
 
 ####
 
