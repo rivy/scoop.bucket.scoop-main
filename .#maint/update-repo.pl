@@ -54,14 +54,14 @@ B<update-repo> will update the mirrored repository and update the current reposi
 # https://metacpan.org/pod/Log::Any::App
 
 # minimum perl version: needed for decent Unicode support, minimum tested version
-use v5.8.8; our $PERL_MIN_VERSION; BEGIN{ $PERL_MIN_VERSION = "5.008008" };
+use v5.8.8; our $PERL_MIN_VERSION; BEGIN{ $PERL_MIN_VERSION = '5.008008' };
 
 use strict;
 use warnings;
 use diagnostics;
 use English;
 
-use version 0.77 (); our $VERSION = version->qv("0.1_0"); # VERSION: major.minor.release[.build]]
+use version 0.77 (); our $VERSION = version->qv('0.1_0'); # VERSION: major.minor.release[.build]]
 
 use Benchmark ':hireswallclock';
 our %code_timing; BEGIN { $code_timing{code}{start} = $code_timing{load_modules}{start} = Benchmark->new; }
@@ -109,13 +109,13 @@ my $ME = path($0)->basename(qr/(?<=.)\.[^.]*/);
 my $ME_dir = path($0)->parent;
 
 my $colorize = 0;
-my %color = ( success => 'green', debug => 'yellow', info => 'cyan', notice => '', warning => 'magenta', error => 'red' );
+my %color = ( success => 'green', debug => 'yellow', info => 'cyan', notice => q//, warning => 'magenta', error => 'red' );
 
 my %log = ( default => { level => 'debug' }, console => { level => 'info' } );
 
 my $log = Log::Any->get_logger(category => $ME);
 
-my @log_dir_default_locations = ( "~/.logs", "~/.log" );
+my @log_dir_default_locations = ( '~/.logs', '~/.log' );
 if ($^O eq 'MSWin32' && defined $ENV{LOCALAPPDATA}) { @log_dir_default_locations = ( @log_dir_default_locations, "$ENV{LOCALAPPDATA}/logs", "$ENV{LOCALAPPDATA}/log" ) };
 @log_dir_default_locations = ( @log_dir_default_locations, "$ME_dir" );
 my $log_file = path(List::Util::first { -e path($_)->child(q{.}) } @log_dir_default_locations)->child("$ME.log");
@@ -128,8 +128,8 @@ my $s_prefix_level = sub { my %p = @_; return (uc $p{level}).': '.$p{message} };
 my $s_colorstrip = sub { use Term::ANSIColor; my %p = @_; return Term::ANSIColor::colorstrip($p{message}) };
 my $s_newline = sub { my %p = @_; return $p{message}."\n"; };
 my $s_colorize_or_prefix_level = sub { my %p = @_; if ($colorize) { $p{message} = &$s_colorize(%p) } else { $p{message} = &$s_prefix_level(%p)}; return $p{message} };
-sub s_tee { my $level = lc $_[0]; my $fh = exists($_[1]) ? $_[1] : \*STDOUT; return sub { my %p = @_; if ($p{level} eq $level) { print $fh $p{message}; $p{message} = '' }; return $p{message} }; }
-sub s_minlevel { my $name = exists($_[0]) ? lc $_[0] : 'default'; return sub { my %p = @_; my $min_level = exists($log{$name}{level}) ? $log{$name}{level} : 'debug'; if (Log::Any::Adapter::Util::numeric_level($p{level}) > Log::Any::Adapter::Util::numeric_level($min_level)) { $p{message} = '' }; return $p{message} }; }
+sub s_tee { my $level = lc $_[0]; my $fh = exists($_[1]) ? $_[1] : \*STDOUT; return sub { my %p = @_; if ($p{level} eq $level) { print $fh $p{message}; $p{message} = q// }; return $p{message} }; }
+sub s_minlevel { my $name = exists($_[0]) ? lc $_[0] : 'default'; return sub { my %p = @_; my $min_level = exists($log{$name}{level}) ? $log{$name}{level} : 'debug'; if (Log::Any::Adapter::Util::numeric_level($p{level}) > Log::Any::Adapter::Util::numeric_level($min_level)) { $p{message} = q// }; return $p{message} }; }
 # ToDO: look into https://metacpan.org/pod/Log::Dispatch::FileWriteRotate as a replacement for Log::Dispatch::File
 my $dispatcher = Log::Dispatch->new(
     outputs => [
@@ -140,13 +140,13 @@ my $dispatcher = Log::Dispatch->new(
     );
 Log::Any::Adapter->set('Dispatch', dispatcher => $dispatcher );
 
-$log->debug("*** starting");
+$log->debug('*** starting');
 $code_timing{init_logging}{stop} = Benchmark->new;
 
 ###
 
 $code_timing{init}{start} = Benchmark->new;
-$log->debug("initializing");
+$log->debug('initializing');
 
 my $repo_path = $ME_dir->parent;
 my $mirror_path = $repo_path->child('.#mirror');
@@ -184,8 +184,8 @@ if (defined $config_file) { $config_file = path($config_file)->child(q{.}) };
 my @config_opts;
 my %config;
 my $s_config_to_args = sub {
-    my $prefix = q{}; $prefix = q{-} if $_[0]=~/^[^-]/; $prefix = q{--} if $_[0]=~/^[^-][^-]/;
-    my $suffix = q{}; $suffix = qq{=$_[1]} if defined $_[1];
+    my $prefix = q//; $prefix = q{-} if $_[0]=~/^[^-]/; $prefix = q{--} if $_[0]=~/^[^-][^-]/;
+    my $suffix = q//; $suffix = qq{=$_[1]} if defined $_[1];
     push @config_opts, ( $prefix.$_[0].$suffix ) if not $_[0]=~/^[-][-]?$/;
     return (1, @_)
     };
@@ -193,11 +193,11 @@ if (defined $config_file and -s $config_file) { Config::General->new(-ConfigFile
 Getopt::Long::GetOptionsFromArray (do { my @t = @config_opts; \@t }, \%ARGV, @optdefs) or pod2usage(2);
 # * load & parse environment defaults ($ME.'_OPTIONS', then, if not found, check $ME.'_OPTS')
 (my $env_options_basename = uc $ME) =~ s/[^_A-Z0-9]/_/;
-my $env_options_name = $env_options_basename."_OPTIONS";
-$env_options_name = $env_options_basename."_OPTS" if not exists($ENV{$env_options_name});
-$env_options_name = q{} if not exists($ENV{$env_options_name});
+my $env_options_name = $env_options_basename.'_OPTIONS';
+$env_options_name = $env_options_basename.'_OPTS' if not exists($ENV{$env_options_name});
+$env_options_name = q// if not exists($ENV{$env_options_name});
 my $env_options = $ENV{$env_options_name};
-$env_options = q{} if not defined $env_options;
+$env_options = q// if not defined $env_options;
 Getopt::Long::GetOptionsFromString ($env_options, \%ARGV, @optdefs) or pod2usage(2);
 # * ARGV
 Getopt::Long::GetOptions (\%ARGV, @optdefs, @help_optdefs) or pod2usage(2);
@@ -208,7 +208,7 @@ if (defined $log_file) { $log->debug(qq{log file located at "$log_file"}) };
 if (defined $config_file) { $log->debug(qq{configuration loaded from "$config_file"}) };
 $ARGV{trace} && $log->trace( dump_var(qw(@config_file_default_locations)) );
 $ARGV{trace} && $log->trace( dump_var(qw($config_file)) );
-if ($env_options ne q{}) { $log->debug("environment options loaded from \$ENV{$env_options_name}") };
+if ($env_options ne q//) { $log->debug("environment options loaded from \$ENV{$env_options_name}") };
 $ARGV{trace} && $log->trace( dump_var(qw($env_options_name)) );
 
 #
@@ -221,7 +221,7 @@ if ($colorize && $^O eq 'MSWin32' && not defined $Win32::Console::ANSI::VERSION)
     if (not defined $Win32::Console::ANSI::VERSION) {
         $colorize = 0;
         %color = ();
-        $log->warn("Output colorization is enabled, but the required Win32 module is missing (to install, use `cpan Win32::Console::ANSI`).");
+        $log->warn('Output colorization is enabled, but the required Win32 module is missing (to install, use `cpan Win32::Console::ANSI`).');
         }
     }
 if (!$colorize) { %color = () };
@@ -330,7 +330,7 @@ foreach my $file (@files) {
     $ARGV{trace} && $log->trace( 'removing '.$file );
     -d $file and do {path($file)->remove_tree; $no_removed_dirs++} or path($file)->remove;
 }
-$log->infof( 'Repository scrubbed (%s file%s, including %s director%s, removed)', scalar(@files), (scalar(@files) == 1 ? '':'s'), $no_removed_dirs, ($no_removed_dirs == 1 ? 'y':'ies') );
+$log->infof( 'Repository scrubbed (%s file%s, including %s director%s, removed)', scalar(@files), (scalar(@files) == 1 ? q//:'s'), $no_removed_dirs, ($no_removed_dirs == 1 ? 'y':'ies') );
 $code_timing{scrub_repo}{stop} = Benchmark->new;
 
 my $file_rule;
@@ -349,13 +349,13 @@ foreach my $file (@files) {
     $t->parent->mkpath;
     $source_dir->child($file)->copy($repo_path->child(path($file)->child(q{.})));
 }
-$log->infof( 'Copied %s file%s from mirror submodule into repository', scalar(@files), (scalar(@files) == 1 ? '':'s') );
+$log->infof( 'Copied %s file%s from mirror submodule into repository', scalar(@files), (scalar(@files) == 1 ? q//:'s') );
 $code_timing{copy_mirror}{stop} = Benchmark->new;
 
 # copy .#maint/file_overrides/* to REPO_DIR (rename any collisions as filename.(mirror).ext)
 ## $source_dir = (($ME_dir, relative to $repo_path) => 1st topmost dir); $src = $source_dir/README*
 $code_timing{copy_overrides}{start} = Benchmark->new;
-$log->debug( "Copying from overrides ... started" );
+$log->debug( 'Copying from overrides ... started' );
 $file_rule = Path::Iterator::Rule->new->file;
 $source_dir = path($ME_dir)->child('file-overrides');
 @files = $file_rule->all( $source_dir, {relative => 1} );
@@ -375,7 +375,7 @@ foreach my $file (@files) {
     }
     $source_dir->child($file)->copy($repo_path->child(path($file)->child(q{.})));
 }
-$log->infof( 'Copied %d override file%s (renaming %s conflicting file%s)', scalar(@files), (scalar(@files) == 1 ? '':'s'), $no_renamed_files, ($no_renamed_files == 1 ? '':'s')  );
+$log->infof( 'Copied %d override file%s (renaming %s conflicting file%s)', scalar(@files), (scalar(@files) == 1 ? q//:'s'), $no_renamed_files, ($no_renamed_files == 1 ? q//:'s')  );
 $code_timing{copy_overrides}{stop} = Benchmark->new;
 
 if (($updated_mirror_id eq $initial_mirror_id) && $ARGV{force}) {
@@ -383,7 +383,7 @@ if (($updated_mirror_id eq $initial_mirror_id) && $ARGV{force}) {
     }
 
 if (($updated_mirror_id ne $initial_mirror_id) || $ARGV{force}) {
-    $log->debugf( "Committing changes to repository %s... started", ($updated_mirror_id ne $initial_mirror_id) ? '(forced) ':q{} );
+    $log->debugf( 'Committing changes to repository %s... started', ($updated_mirror_id ne $initial_mirror_id) ? '(forced) ':q// );
 
     local $CWD = $repo_path;  # NOTE: must be absolute path if changing between volumes (eg, `File::Spec->rel2abs($mirror_path)`)?; ToDO: add issue noting *intermittant* GPF when chdir from 'd:\...' to 'c:\...' unless target is absolute path @ https://github.com/dagolden/File-chdir/issues
 
@@ -407,19 +407,19 @@ if (($updated_mirror_id ne $initial_mirror_id) || $ARGV{force}) {
     $output = Term::ANSIColor::colorstrip(`git commit --quiet --file="$tempfile"`); $ARGV{trace} && $log->trace( $output );
     $output = Term::ANSIColor::colorstrip(`git tag "$tag"`); $ARGV{trace} && $log->trace( $output );
 
-    $log->info( "Update committed to repository" );
+    $log->info( 'Update committed to repository' );
     }
 
-$log->debug("normal completion");
+$log->debug('normal completion');
 $code_timing{code}{stop} = Benchmark->new;
-$log->info("duration: ".Benchmark::timestr( Benchmark::timediff($code_timing{code}{stop},$code_timing{code}{start})) );
+$log->info('duration: '.Benchmark::timestr( Benchmark::timediff($code_timing{code}{stop},$code_timing{code}{start})) );
 
 ####
 
 sub sys_execute {
     my (@cmd_and_args) = @_;
     my $return_code  = 0;
-    my $error_string = '';
+    my $error_string = q//;
     # my $status = system(@cmd_and_args);
     IPC::Run3::run3( \@cmd_and_args, { return_if_system_error => 0 } );
     my $status = $?;
@@ -429,12 +429,12 @@ sub sys_execute {
     }
     elsif ($status & 127) {
         $return_code = $status & 127;
-        $error_string = sprintf("Child died with signal %d, %s coredump",
+        $error_string = sprintf('Child died with signal %d, %s coredump',
                                 $return_code, ($status & 128) ? 'with' : 'without');
     }
     else {
         $return_code = $status >> 8; if ( $return_code == 255 ) { $return_code = -1; }
-        $error_string = '';
+        $error_string = q//;
     }
     return ($return_code, $error_string);
 }
@@ -463,6 +463,6 @@ sub dump_var
     return "$name = $val";
 }
 
-sub colorize { use Term::ANSIColor; my $color = exists($color{lc $_[0]})?$color{lc $_[0]}:q{}; if ($color eq '') { return $_[1] } else { return Term::ANSIColor::colored([$color], $_[1]) } }
+sub colorize { use Term::ANSIColor; my $color = exists($color{lc $_[0]})?$color{lc $_[0]}:q//; if ($color eq q//) { return $_[1] } else { return Term::ANSIColor::colored([$color], $_[1]) } }
 
-sub opt_bool_normalize { my $b = lc shift; if ($b eq '') {$b = 1}; if ($b eq 'f' || $b eq 'false' || $b eq 'off' || $b eq 'never' || $b eq 'no') {$b = 0}; if ($b) {$b = 1} else {$b = 0}; return $b }
+sub opt_bool_normalize { my $b = lc shift; if ($b eq q//) {$b = 1}; if ($b eq 'f' || $b eq 'false' || $b eq 'off' || $b eq 'never' || $b eq 'no') {$b = 0}; if ($b) {$b = 1} else {$b = 0}; return $b }
