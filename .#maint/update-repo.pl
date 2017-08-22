@@ -176,6 +176,8 @@ mark('init:args_opts');
 
 @ARGV = Win32::CommandLine::argv() if eval { require Win32::CommandLine };
 
+{ my @ARGV = @ARGV; $ARGV{trace} && $log->trace( dump_var( q{@ARGV} ) ); }
+
 # options
 my %ARGV = ();
 # * defaults
