@@ -342,98 +342,102 @@ $log->info( 'Mirror submodule'.($mirror_updated ? ' changes pulled from upstream
 mark('network_down:update_mirror');
 mark('network_down');
 
-mark('io');
-my @files;
-
-# erase all repo files except ., .., .git*, .#mirror, and the directory containing this script
-mark('io:scrub_repo');
-$log->debug( 'Cleaning repository ... started' );
-@files = grep { !/(?:\.|\.\.|\.git.*|\.#mirror)$/ and index($ME_dir->absolute, $_) != 0 } File::Glob::glob $repo_path->absolute.'/{.,}*';
-my $no_removed_dirs = 0;
-foreach my $file (@files) {
-    $ARGV{trace} && $log->trace( 'removing '.$file );
-    -d $file and do {path($file)->remove_tree; $no_removed_dirs++} or path($file)->remove;
-}
-$log->infof( 'Repository scrubbed (%s file%s, including %s director%s, removed)', scalar(@files), (scalar(@files) == 1 ? q//:'s'), $no_removed_dirs, ($no_removed_dirs == 1 ? 'y':'ies') );
-mark('io:scrub_repo');
-
-my $file_rule;
-my $source_dir;
-
-# copy all files recursively from $mirror_source (default == $mirror_path) ignoring .git* files to REPO_DIR (default == '.')
-mark('io:copy_mirror');
-$log->debug( 'Copying from mirror ... started' );
-$file_rule = Path::Iterator::Rule->new->file;
-$source_dir = path($mirror_path)->child($in_mirror_source);
-@files = $file_rule->all( $source_dir, {relative => 1} );
-foreach my $file (@files) {
-    # # copy
-    my $t = $repo_path->child(path($file));
-    $ARGV{trace} && $log->trace( "$file => $t" );
-    $t->parent->mkpath;
-    $source_dir->child($file)->copy($repo_path->child(path($file)->child(q{.})));
-}
-$log->infof( 'Copied %s file%s from mirror submodule into repository', scalar(@files), (scalar(@files) == 1 ? q//:'s') );
-mark('io:copy_mirror');
-
-# copy .#maint/file_overrides/* to REPO_DIR (rename any collisions as filename.(mirror).ext)
-## $source_dir = (($ME_dir, relative to $repo_path) => 1st topmost dir); $src = $source_dir/README*
-mark('io:copy_overrides');
-$log->debug( 'Copying from overrides ... started' );
-$file_rule = Path::Iterator::Rule->new->file;
-$source_dir = path($ME_dir)->child('file-overrides');
-@files = $file_rule->all( $source_dir, {relative => 1} );
-my $no_renamed_files = 0;
-foreach my $file (@files) {
-    # # copy
-    my $t = $repo_path->child(path($file));
-    $ARGV{trace} && $log->trace( "$file => $t" );
-    $t->parent->mkpath;
-    if (-e $t) {
-        my $basename = $t->basename(qr/(?<=.)\.[^.]*/);
-        my $suffix = $t->basename; $suffix =~ s/^\Q$basename\E//;
-        my $new_name = $t->parent->child($basename.'.(mirror)'.$suffix);
-        $t->move($new_name);
-        $no_renamed_files++;
-        $ARGV{trace} && $log->trace( "file renamed ($t => $new_name)" );
-    }
-    $source_dir->child($file)->copy($repo_path->child(path($file)->child(q{.})));
-}
-$log->infof( 'Copied %d override file%s (renaming %s conflicting file%s)', scalar(@files), (scalar(@files) == 1 ? q//:'s'), $no_renamed_files, ($no_renamed_files == 1 ? q//:'s')  );
-mark('io:copy_overrides');
-mark('io');
-
-if ( !$mirror_updated && $ARGV{force} ) {
-    $interval_log = '* forced commit; (no mirror changes)';
+if ( $mirror_updated || $ARGV{force} ) {
+    if ( !$mirror_updated ) {
+        $interval_log = '* forced commit; (no mirror changes)';
     }
 
-if ( $mirror_updated || $ARGV{force}) {
-    $log->debugf( 'Committing changes to repository %s... started', $mirror_updated ? '(forced) ':q// );
+    mark('io');
+    my @files;
 
-    local $CWD = $repo_path;  # NOTE: must be absolute path if changing between volumes (eg, `File::Spec->rel2abs($mirror_path)`)?; ToDO: add issue noting *intermittant* GPF when chdir from 'd:\...' to 'c:\...' unless target is absolute path @ https://github.com/dagolden/File-chdir/issues
-
-    my $tag = DateTime->now()->strftime('0.%Y.%m%d.%H%M');
-    my $tempfile = Path::Tiny->tempfile( TEMPLATE => "$ME.($PID).XXXXXXXX", SUFFIX => '.txt' );
-    my $fh = $tempfile->filehandle('>');
-
-    my $commit_summary = "update:($tag): $interval_log_summary";
-    if ((length $commit_summary) > $commit_summary_length) { my $elipsis='...'; $commit_summary = (substr $commit_summary, 0, $commit_summary_length-(length $elipsis)) . $elipsis; }
-
-    my $commit_msg = "$commit_summary\n\n* mirror of github.com/lukesampson/scoop:bucket (\"main\")".(($interval_log ne q//) ? "\n\n.# Summary (changes by commit)\n\n$interval_log":q//);
-
-    $ARGV{trace} && $log->trace( dump_var('$commit_msg') );
-
-    print $fh $commit_msg;
-
-    $log->debug( dump_var(q/$tag/) );
-    $log->debug( dump_var(q/$tempfile/) );
-
-    $output = Term::ANSIColor::colorstrip(`git add -A .`); $ARGV{trace} && $log->trace( $output );
-    $output = Term::ANSIColor::colorstrip(`git commit --quiet --file="$tempfile"`); $ARGV{trace} && $log->trace( $output );
-    $output = Term::ANSIColor::colorstrip(`git tag "$tag"`); $ARGV{trace} && $log->trace( $output );
-
-    $log->info( 'Update committed to repository' );
+    # erase all repo files except ., .., .git*, .#mirror, and the directory containing this script
+    mark('io:scrub_repo');
+    $log->debug( 'Cleaning repository ... started' );
+    @files = grep { !/(?:\.|\.\.|\.git.*|\.#mirror)$/ and index($ME_dir->absolute, $_) != 0 } File::Glob::glob $repo_path->absolute.'/{.,}*';
+    my $no_removed_dirs = 0;
+    foreach my $file (@files) {
+        $ARGV{trace} && $log->trace( 'removing '.$file );
+        -d $file and do {path($file)->remove_tree; $no_removed_dirs++} or path($file)->remove;
     }
+    $log->infof( 'Repository scrubbed (%s file%s, including %s director%s, removed)', scalar(@files), (scalar(@files) == 1 ? q//:'s'), $no_removed_dirs, ($no_removed_dirs == 1 ? 'y':'ies') );
+    mark('io:scrub_repo');
+
+    my $file_rule;
+    my $source_dir;
+
+    # copy all files recursively from $mirror_source (default == $mirror_path) ignoring .git* files to REPO_DIR (default == '.')
+    mark('io:copy_mirror');
+    $log->debug( 'Copying from mirror ... started' );
+    $file_rule = Path::Iterator::Rule->new->file;
+    $source_dir = path($mirror_path)->child($in_mirror_source);
+    @files = $file_rule->all( $source_dir, {relative => 1} );
+    foreach my $file (@files) {
+        # # copy
+        my $t = $repo_path->child(path($file));
+        $ARGV{trace} && $log->trace( "$file => $t" );
+        $t->parent->mkpath;
+        $source_dir->child($file)->copy($repo_path->child(path($file)->child(q{.})));
+    }
+    $log->infof( 'Copied %s file%s from mirror submodule into repository', scalar(@files), (scalar(@files) == 1 ? q//:'s') );
+    mark('io:copy_mirror');
+
+    # copy .#maint/file_overrides/* to REPO_DIR (rename any collisions as filename.(mirror).ext)
+    ## $source_dir = (($ME_dir, relative to $repo_path) => 1st topmost dir); $src = $source_dir/README*
+    mark('io:copy_overrides');
+    $log->debug( 'Copying from overrides ... started' );
+    $file_rule = Path::Iterator::Rule->new->file;
+    $source_dir = path($ME_dir)->child('file-overrides');
+    @files = $file_rule->all( $source_dir, {relative => 1} );
+    my $no_renamed_files = 0;
+    foreach my $file (@files) {
+        # # copy
+        my $t = $repo_path->child(path($file));
+        $ARGV{trace} && $log->trace( "$file => $t" );
+        $t->parent->mkpath;
+        if (-e $t) {
+            my $basename = $t->basename(qr/(?<=.)\.[^.]*/);
+            my $suffix = $t->basename; $suffix =~ s/^\Q$basename\E//;
+            my $new_name = $t->parent->child($basename.'.(mirror)'.$suffix);
+            $t->move($new_name);
+            $no_renamed_files++;
+            $ARGV{trace} && $log->trace( "file renamed ($t => $new_name)" );
+        }
+        $source_dir->child($file)->copy($repo_path->child(path($file)->child(q{.})));
+    }
+    $log->infof( 'Copied %d override file%s (renaming %s conflicting file%s)', scalar(@files), (scalar(@files) == 1 ? q//:'s'), $no_renamed_files, ($no_renamed_files == 1 ? q//:'s')  );
+    mark('io:copy_overrides');
+    mark('io');
+
+    mark('network_up');
+    if ( $mirror_updated || $ARGV{force}) {
+        $log->debugf( 'Committing changes to repository %s... started', $mirror_updated ? '(forced) ':q// );
+
+        local $CWD = $repo_path;  # NOTE: must be absolute path if changing between volumes (eg, `File::Spec->rel2abs($mirror_path)`)?; ToDO: add issue noting *intermittant* GPF when chdir from 'd:\...' to 'c:\...' unless target is absolute path @ https://github.com/dagolden/File-chdir/issues
+
+        my $tag = DateTime->now()->strftime('0.%Y.%m%d.%H%M');
+        my $tempfile = Path::Tiny->tempfile( TEMPLATE => "$ME.($PID).XXXXXXXX", SUFFIX => '.txt' );
+        my $fh = $tempfile->filehandle('>');
+
+        my $commit_summary = "update:($tag): $interval_log_summary";
+        if ((length $commit_summary) > $commit_summary_length) { my $elipsis='...'; $commit_summary = (substr $commit_summary, 0, $commit_summary_length-(length $elipsis)) . $elipsis; }
+
+        my $commit_msg = "$commit_summary\n\n* mirror of github.com/lukesampson/scoop:bucket (\"main\")".(($interval_log ne q//) ? "\n\n.# Summary (changes by commit)\n\n$interval_log":q//);
+
+        $ARGV{trace} && $log->trace( dump_var('$commit_msg') );
+
+        print $fh $commit_msg;
+
+        $log->debug( dump_var(q/$tag/) );
+        $log->debug( dump_var(q/$tempfile/) );
+
+        $output = Term::ANSIColor::colorstrip(`git add -A .`); $ARGV{trace} && $log->trace( $output );
+        $output = Term::ANSIColor::colorstrip(`git commit --quiet --file="$tempfile"`); $ARGV{trace} && $log->trace( $output );
+        $output = Term::ANSIColor::colorstrip(`git tag "$tag"`); $ARGV{trace} && $log->trace( $output );
+
+        $log->info( 'Update committed to repository' );
+    }
+    mark('network_up');
+}
 
 $log->debug('normal completion');
 
