@@ -277,8 +277,8 @@ $ARGV{trace} && $log->trace( dump_var(qw(%color)) );
 
 my $output;
 
-mark('network');
-mark('network:update:repo');
+mark('network_down');
+mark('network_down:update_repo');
 $log->debug( 'Clean and update repository ... started' );
 my $repo_branch;
 my ($initial_repo_id, $updated_repo_id);
@@ -299,9 +299,9 @@ my $repo_updated = 0;
 $repo_updated = ($updated_repo_id ne $initial_repo_id);
 $log->debug( dump_var( q{$repo_updated} ) );
 $log->info( 'Repository'.($repo_updated ? ' changes pulled from origin remote':' already up-to-date with origin remote') );
-mark('network:update:repo');
+mark('network_down:update_repo');
 
-mark('network:update:mirror');
+mark('network_down:update_mirror');
 $log->debug( 'Update mirror submodule ... started' );
 my ($initial_mirror_id, $updated_mirror_id);
 my $mirror_updated = 0;
@@ -339,8 +339,8 @@ my $interval_log_summary = q//;
     $log->debug( dump_var( q{$mirror_commit_date} ) );
 }
 $log->info( 'Mirror submodule'.($mirror_updated ? ' changes pulled from upstream remote':' already up-to-date with upstream remote') );
-mark('network:update:mirror');
-mark('network');
+mark('network_down:update_mirror');
+mark('network_down');
 
 mark('io');
 my @files;
