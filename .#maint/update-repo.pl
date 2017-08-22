@@ -266,46 +266,51 @@ $code_timing{update_repo}{start} = Benchmark->new;
 $log->debug( 'Clean and update repository ... started' );
 my $repo_branch;
 my ($initial_repo_id, $updated_repo_id);
+my $repo_updated = 0;
 {
     local $CWD = $repo_path;  # NOTE: must be absolute path if changing between volumes (eg, `File::Spec->rel2abs($mirror_path)`)?; ToDO: add issue noting *intermittant* GPF when chdir from 'd:\...' to 'c:\...' unless target is absolute path @ https://github.com/dagolden/File-chdir/issues
     # NOTE: `D:\...>perl -e "use File::chdir; { local $CWD='C:..\\.mirror'; };"` DOESN'T reproduce the issue
-    chomp( $repo_branch = Term::ANSIColor::colorstrip(`git rev-parse --abbrev-ref HEAD`) );
+    chomp( $repo_branch = Term::ANSIColor::colorstrip(`git rev-parse --abbrev-ref HEAD`) ); ## note: detached HEAD state => retval = 'HEAD'
     $log->debug( dump_var( q{$repo_branch} ) );
     $log->info( qq{Active repository branch is "${repo_branch}"} );
-    chomp( $initial_repo_id = Term::ANSIColor::colorstrip( `git describe --all --long --always` ) );
+    chomp( $initial_repo_id = Term::ANSIColor::colorstrip( `git rev-parse HEAD` ) );
     $log->debug( dump_var( q{$initial_repo_id} ) );
     $output = Term::ANSIColor::colorstrip(`git clean -fd`); $ARGV{trace} && $log->trace( $output );
     $output = Term::ANSIColor::colorstrip(`git pull --quiet`); $ARGV{trace} && $log->trace( $output );
-    chomp( $updated_repo_id = Term::ANSIColor::colorstrip(`git describe --all --long --always`) );
+    chomp( $updated_repo_id = Term::ANSIColor::colorstrip(`git rev-parse HEAD`) );
     $log->debug( dump_var( q{$updated_repo_id} ) );
 }
-$log->info( 'Repository'.(($updated_repo_id eq $initial_repo_id) ? ' already up-to-date with origin remote' : ' changes pulled from origin remote') );
+$repo_updated = ($updated_repo_id ne $initial_repo_id);
+$log->debug( dump_var( q{$repo_updated} ) );
+$log->info( 'Repository'.($repo_updated ? ' changes pulled from origin remote':' already up-to-date with origin remote') );
 $code_timing{update_repo}{stop} = Benchmark->new;
 
 $code_timing{update_mirror}{start} = Benchmark->new;
 $log->debug( 'Update mirror submodule ... started' );
 my ($initial_mirror_id, $updated_mirror_id);
+my $mirror_updated = 0;
 my $last_mirror_commit_date;
 my $mirror_commit_date;
-my $interval_log;
-my $interval_log_summary;
+my $interval_log = q//;
+my $interval_log_summary = q//;
 {
     local $CWD = $mirror_path;  # NOTE: must be absolute path if changing between volumes (eg, `File::Spec->rel2abs($mirror_path)`)?; ToDO: add issue noting *intermittant* GPF when chdir from 'd:\...' to 'c:\...' unless target is absolute path @ https://github.com/dagolden/File-chdir/issues
     # NOTE: `D:\...>perl -e "use File::chdir; { local $CWD='C:..\\.mirror'; };"` DOESN'T reproduce the issue
     $last_mirror_commit_date = q{1970-01-01};  # earliest possible time (within the unix epoch)
     chomp( $last_mirror_commit_date = Term::ANSIColor::colorstrip(`git log -1 --date=iso --format="%cd"`) );
     $log->debug( dump_var( q{$last_mirror_commit_date} ) );
-    chomp( $initial_mirror_id = Term::ANSIColor::colorstrip( `git describe --all --long --always` ) );
+    chomp( $initial_mirror_id = Term::ANSIColor::colorstrip( `git rev-parse HEAD` ) );
     $log->debug( dump_var( q{$initial_mirror_id} ) );
     $output = Term::ANSIColor::colorstrip(`git fetch --quiet`); $ARGV{trace} && $log->trace( $output );
     $output = Term::ANSIColor::colorstrip(`git checkout --quiet origin/master`); $ARGV{trace} && $log->trace( $output );
-    chomp( $updated_mirror_id = Term::ANSIColor::colorstrip(`git describe --all --long --always`) );
+    chomp( $updated_mirror_id = Term::ANSIColor::colorstrip(`git rev-parse HEAD`) );
     $log->debug( dump_var( q{$updated_mirror_id} ) );
 
-    $interval_log = '* (no changes)';
-    $interval_log_summary = '* (no changes)';
+    $mirror_updated = ($updated_mirror_id ne $initial_mirror_id);
+    $log->debug( dump_var( q{$mirror_updated} ) );
+
     $mirror_commit_date = $last_mirror_commit_date;
-    if ($updated_mirror_id ne $initial_mirror_id) {
+    if ($mirror_updated) {
         my $log_date = DateTime::Format::Flexible->parse_datetime( $last_mirror_commit_date )->add( seconds => 1 )->strftime(q{%FT%H:%M:%S%z});
         $log->trace( dump_var( q{$log_date} ) );
         $interval_log = Term::ANSIColor::colorstrip(`git log --pretty=format:"%h @ %cI  %s" --no-merges --since "$log_date" -- $in_mirror_source`);
@@ -313,10 +318,11 @@ my $interval_log_summary;
         $interval_log_summary = join( '; ', (split /\n/, Term::ANSIColor::colorstrip(`git log --pretty=format:"%s" --no-merges --since "$log_date" -- $in_mirror_source`)));
         chomp( $mirror_commit_date = Term::ANSIColor::colorstrip(`git log -1 --date=iso --format="%cd"`) );
         }
+    if ($interval_log eq q//) { $interval_log_summary = '* no changes; (mirror code changes only)'; }
     $log->debug( dump_var( q{$interval_log} ) );
     $log->debug( dump_var( q{$mirror_commit_date} ) );
 }
-$log->info( 'Mirror submodule'.(($updated_mirror_id eq $initial_mirror_id) ? ' already up-to-date with upstream remote':' changes pulled from upstream remote') );
+$log->info( 'Mirror submodule'.($mirror_updated ? ' changes pulled from upstream remote':' already up-to-date with upstream remote') );
 $code_timing{update_mirror}{stop} = Benchmark->new;
 
 my @files;
@@ -378,12 +384,12 @@ foreach my $file (@files) {
 $log->infof( 'Copied %d override file%s (renaming %s conflicting file%s)', scalar(@files), (scalar(@files) == 1 ? q//:'s'), $no_renamed_files, ($no_renamed_files == 1 ? q//:'s')  );
 $code_timing{copy_overrides}{stop} = Benchmark->new;
 
-if (($updated_mirror_id eq $initial_mirror_id) && $ARGV{force}) {
-    $interval_log = "* forced commit; (no changes)"
+if ( !$mirror_updated && $ARGV{force} ) {
+    $interval_log = '* forced commit; (no mirror changes)';
     }
 
-if (($updated_mirror_id ne $initial_mirror_id) || $ARGV{force}) {
-    $log->debugf( 'Committing changes to repository %s... started', ($updated_mirror_id ne $initial_mirror_id) ? '(forced) ':q// );
+if ( $mirror_updated || $ARGV{force}) {
+    $log->debugf( 'Committing changes to repository %s... started', $mirror_updated ? '(forced) ':q// );
 
     local $CWD = $repo_path;  # NOTE: must be absolute path if changing between volumes (eg, `File::Spec->rel2abs($mirror_path)`)?; ToDO: add issue noting *intermittant* GPF when chdir from 'd:\...' to 'c:\...' unless target is absolute path @ https://github.com/dagolden/File-chdir/issues
 
@@ -394,7 +400,7 @@ if (($updated_mirror_id ne $initial_mirror_id) || $ARGV{force}) {
     my $commit_summary = "update:($tag): $interval_log_summary";
     if ((length $commit_summary) > $commit_summary_length) { my $elipsis='...'; $commit_summary = (substr $commit_summary, 0, $commit_summary_length-(length $elipsis)) . $elipsis; }
 
-    my $commit_msg = "$commit_summary\n\n* mirror of github.com/lukesampson/scoop:bucket (\"main\")\n\n.# Summary (changes by commit)\n\n$interval_log";
+    my $commit_msg = "$commit_summary\n\n* mirror of github.com/lukesampson/scoop:bucket (\"main\")".(($interval_log ne q//) ? "\n\n.# Summary (changes by commit)\n\n$interval_log":q//);
 
     $ARGV{trace} && $log->trace( dump_var('$commit_msg') );
 
