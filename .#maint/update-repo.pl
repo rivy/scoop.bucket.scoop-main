@@ -279,7 +279,7 @@ my $output;
 
 mark('network_down');
 mark('network_down:update_repo');
-$log->debug( 'Clean and update repository ... started' );
+$log->debug( 'Clean and update local repository ... started' );
 my $repo_branch;
 my ($initial_repo_id, $updated_repo_id);
 my $repo_updated = 0;
@@ -288,7 +288,7 @@ my $repo_updated = 0;
     # NOTE: `D:\...>perl -e "use File::chdir; { local $CWD='C:..\\.mirror'; };"` DOESN'T reproduce the issue
     chomp( $repo_branch = Term::ANSIColor::colorstrip(`git rev-parse --abbrev-ref HEAD`) ); ## note: detached HEAD state => retval = 'HEAD'
     $log->debug( dump_var( q{$repo_branch} ) );
-    $log->info( qq{Active repository branch is "${repo_branch}"} );
+    $log->info( qq{Active local repository branch is "${repo_branch}"} );
     chomp( $initial_repo_id = Term::ANSIColor::colorstrip( `git rev-parse HEAD` ) );
     $log->debug( dump_var( q{$initial_repo_id} ) );
     $output = Term::ANSIColor::colorstrip(`git clean -fd`); $ARGV{trace} && $log->trace( $output );
@@ -298,7 +298,7 @@ my $repo_updated = 0;
 }
 $repo_updated = ($updated_repo_id ne $initial_repo_id);
 $log->debug( dump_var( q{$repo_updated} ) );
-$log->info( 'Repository'.($repo_updated ? ' changes pulled from origin remote':' already up-to-date with origin remote') );
+$log->info( 'Local repository'.($repo_updated ? ' changes pulled from origin remote':' already up-to-date with origin remote') );
 mark('network_down:update_repo');
 
 mark('network_down:update_mirror');
@@ -352,14 +352,14 @@ if ( $mirror_updated || $ARGV{force} ) {
 
     # erase all repo files except ., .., .git*, .#mirror, and the directory containing this script
     mark('io:scrub_repo');
-    $log->debug( 'Cleaning repository ... started' );
+    $log->debug( 'Cleaning local repository ... started' );
     @files = grep { !/(?:\.|\.\.|\.git.*|\.#mirror)$/ and index($ME_dir->absolute, $_) != 0 } File::Glob::glob $repo_path->absolute.'/{.,}*';
     my $no_removed_dirs = 0;
     foreach my $file (@files) {
         $ARGV{trace} && $log->trace( 'removing '.$file );
         -d $file and do {path($file)->remove_tree; $no_removed_dirs++} or path($file)->remove;
     }
-    $log->infof( 'Repository scrubbed (%s file%s, including %s director%s, removed)', scalar(@files), (scalar(@files) == 1 ? q//:'s'), $no_removed_dirs, ($no_removed_dirs == 1 ? 'y':'ies') );
+    $log->infof( 'Local repository scrubbed (%s file%s, including %s director%s, removed)', scalar(@files), (scalar(@files) == 1 ? q//:'s'), $no_removed_dirs, ($no_removed_dirs == 1 ? 'y':'ies') );
     mark('io:scrub_repo');
 
     my $file_rule;
@@ -378,7 +378,7 @@ if ( $mirror_updated || $ARGV{force} ) {
         $t->parent->mkpath;
         $source_dir->child($file)->copy($repo_path->child(path($file)->child(q{.})));
     }
-    $log->infof( 'Copied %s file%s from mirror submodule into repository', scalar(@files), (scalar(@files) == 1 ? q//:'s') );
+    $log->infof( 'Copied %s file%s from mirror submodule into local repository', scalar(@files), (scalar(@files) == 1 ? q//:'s') );
     mark('io:copy_mirror');
 
     # copy .#maint/file_overrides/* to REPO_DIR (rename any collisions as filename.(mirror).ext)
@@ -410,7 +410,7 @@ if ( $mirror_updated || $ARGV{force} ) {
 
     mark('network_up');
     if ( $mirror_updated || $ARGV{force}) {
-        $log->debugf( 'Committing changes to repository %s... started', $mirror_updated ? '(forced) ':q// );
+        $log->debugf( 'Committing changes to local repository %s... started', $mirror_updated ? '(forced) ':q// );
 
         local $CWD = $repo_path;  # NOTE: must be absolute path if changing between volumes (eg, `File::Spec->rel2abs($mirror_path)`)?; ToDO: add issue noting *intermittant* GPF when chdir from 'd:\...' to 'c:\...' unless target is absolute path @ https://github.com/dagolden/File-chdir/issues
 
@@ -434,7 +434,7 @@ if ( $mirror_updated || $ARGV{force} ) {
         $output = Term::ANSIColor::colorstrip(`git commit --quiet --file="$tempfile"`); $ARGV{trace} && $log->trace( $output );
         $output = Term::ANSIColor::colorstrip(`git tag "$tag"`); $ARGV{trace} && $log->trace( $output );
 
-        $log->info( 'Update committed to repository' );
+        $log->info( 'Update committed to local repository' );
     }
     mark('network_up');
 }
