@@ -338,7 +338,7 @@ my $interval_log_summary = q//;
     $log->debug( dump_var( q{$interval_log} ) );
     $log->debug( dump_var( q{$mirror_commit_date} ) );
 }
-$log->info( 'Mirror submodule'.($mirror_updated ? ' changes pulled from upstream remote':' already up-to-date with upstream remote') );
+$log->info( 'Mirror submodule'.($mirror_updated ? ' changes pulled from upstream remote ('.scalar(split /\n/, $interval_log).' commits pulled)':' already up-to-date with upstream remote') );
 mark('network_down:update_mirror');
 mark('network_down');
 
