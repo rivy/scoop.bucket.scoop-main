@@ -313,7 +313,7 @@ my $interval_log_summary = q//;
     local $CWD = $mirror_path;  # NOTE: must be absolute path if changing between volumes (eg, `File::Spec->rel2abs($mirror_path)`)?; ToDO: add issue noting *intermittant* GPF when chdir from 'd:\...' to 'c:\...' unless target is absolute path @ https://github.com/dagolden/File-chdir/issues
     # NOTE: `D:\...>perl -e "use File::chdir; { local $CWD='C:..\\.mirror'; };"` DOESN'T reproduce the issue
     $last_mirror_commit_date = q{1970-01-01};  # earliest possible time (within the unix epoch)
-    chomp( $last_mirror_commit_date = Term::ANSIColor::colorstrip(`git log -1 --date=iso --format="%cd"`) );
+    chomp( $last_mirror_commit_date = Term::ANSIColor::colorstrip(`git --no-pager log -1 --date=iso --format="%cd"`) );
     $log->debug( dump_var( q{$last_mirror_commit_date} ) );
     chomp( $initial_mirror_id = Term::ANSIColor::colorstrip( `git rev-parse HEAD` ) );
     $log->debug( dump_var( q{$initial_mirror_id} ) );
@@ -329,10 +329,10 @@ my $interval_log_summary = q//;
     if ($mirror_updated) {
         my $log_date = DateTime::Format::Flexible->parse_datetime( $last_mirror_commit_date )->add( seconds => 1 )->strftime(q{%FT%H:%M:%S%z});
         $log->trace( dump_var( q{$log_date} ) );
-        $interval_log = Term::ANSIColor::colorstrip(`git log --pretty=format:"%h @ %cI  %s" --no-merges --since "$log_date" -- $in_mirror_source`);
+        $interval_log = Term::ANSIColor::colorstrip(`git --no-pager log --pretty=format:"%h @ %cI  %s" --no-merges --since "$log_date" -- $in_mirror_source`);
         $interval_log =~ s/(\d{4}-\d\d-\d\d)(?:T|\s+)(\d\d\:\d\d:\d\d)\s*([+-]\d\d:?\d\d)/$1.$2$3/gm; # cosmetic reformat of date/time fields
-        $interval_log_summary = join( '; ', (split /\n/, Term::ANSIColor::colorstrip(`git log --pretty=format:"%s" --no-merges --since "$log_date" -- $in_mirror_source`)));
-        chomp( $mirror_commit_date = Term::ANSIColor::colorstrip(`git log -1 --date=iso --format="%cd"`) );
+        $interval_log_summary = join( '; ', (split /\n/, Term::ANSIColor::colorstrip(`git --no-pager log --pretty=format:"%s" --no-merges --since "$log_date" -- $in_mirror_source`)));
+        chomp( $mirror_commit_date = Term::ANSIColor::colorstrip(`git --no-pager log -1 --date=iso --format="%cd"`) );
         }
     if ($interval_log eq q//) { $interval_log_summary = '* no changes; (mirror code changes only)'; }
     $log->debug( dump_var( q{$interval_log} ) );
