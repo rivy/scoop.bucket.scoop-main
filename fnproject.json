@@ -1,11 +1,11 @@
 {
     "homepage": "http://fnproject.io/",
     "license": "https://github.com/fnproject/cli/blob/master/LICENSE",
-    "version": "0.4.20",
+    "version": "0.4.23",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/fnproject/cli/releases/download/0.4.20/fn.exe",
-            "hash": "e1646fff7c203403d6f28865169213e240ea165c6818a69b759e15b57c7c813c"
+            "url": "https://github.com/fnproject/cli/releases/download/0.4.23/fn.exe",
+            "hash": "cbc339170cbf788de56772e9b761fe487e1734cb3feaaf548cb696aad20670f0"
         }
     },
     "bin": "fn.exe",
