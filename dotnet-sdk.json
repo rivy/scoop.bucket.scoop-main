@@ -1,20 +1,33 @@
 {
-    "version": "2.0.3",
+    "version": "2.1.2",
     "homepage": "https://www.microsoft.com/net/",
     "license": "MIT",
     "architecture": {
         "64bit": {
-            "url": "https://download.microsoft.com/download/D/7/2/D725E47F-A4F1-4285-8935-A91AE2FCC06A/dotnet-sdk-2.0.3-win-x64.zip",
-            "hash": "sha512:8b4bd2174f413f9043374d0cfa7d4061f0aeedc28c16257e66b99f28454bc0a898c6f52d4cf8349413ae222b21e6f594a8f70c1892844a0416e2be2994af13f1"
+            "url": "https://dotnetcli.blob.core.windows.net/dotnet/Sdk/2.1.2/dotnet-sdk-2.1.2-win-x64.zip",
+            "hash": "sha512:1b0988b048cc0d4aa7f6335a35e873d343546d1f11e2c19e323138205cdeefa8e0961390fb9477e750a46ec244ef9886ac83b6127ddcdfd77a75550d4aeeab27"
         },
         "32bit": {
-            "url": "https://download.microsoft.com/download/D/7/2/D725E47F-A4F1-4285-8935-A91AE2FCC06A/dotnet-sdk-2.0.3-win-x86.zip",
-            "hash": "sha512:37deddbfc1a8ea72da4e864343bb4374bd50d744e1621910de30f8d83eaa3860b14f262750810a7ff66f8ab05a587cd71a935a130acf499257d8d4509e0b3cb2"
+            "url": "https://dotnetcli.blob.core.windows.net/dotnet/Sdk/2.1.2/dotnet-sdk-2.1.2-win-x86.zip",
+            "hash": "sha512:db638b7dff1f384f136da9358a57393b2a5f0365a663beda08130a3fd5694ac8660f8a02823f39490b435d9c96e45a475e848448fffef0b52824f7e54d08cf76"
         }
     },
     "bin": "dotnet.exe",
     "checkver": {
         "url": "https://www.microsoft.com/net/download/windows",
         "re": "Download .NET Core ([\\d.]+) SDK"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://dotnetcli.blob.core.windows.net/dotnet/Sdk/$version/dotnet-sdk-$version-win-x64.zip"
+            },
+            "32bit": {
+                "url": "https://dotnetcli.blob.core.windows.net/dotnet/Sdk/$version/dotnet-sdk-$version-win-x86.zip"
+            }
+        },
+        "hash": {
+            "url": "https://dotnetcli.blob.core.windows.net/dotnet/checksums/$version-sdk-sha.txt"
+        }
     }
 }
