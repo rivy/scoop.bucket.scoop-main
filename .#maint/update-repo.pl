@@ -353,7 +353,7 @@ if ( $mirror_updated || $ARGV{force} ) {
     # erase all repo files except ., .., .git*, .#mirror, and the directory containing this script
     mark('io:scrub_repo');
     $log->debug( 'Cleaning local repository ... started' );
-    @files = grep { !/(?:\.|\.\.|\.git.*|\.#mirror)$/ and index($ME_dir->absolute, $_) != 0 } File::Glob::glob $repo_path->absolute.'/{.,}*';
+    @files = grep { !/(?:\.|\.\.|\.git.*|\.#mirror)$/ and index($ME_dir->absolute, $_) != 0 } File::Glob::bsd_glob $repo_path->absolute.'/{.,}*';
     my $no_removed_dirs = 0;
     foreach my $file (@files) {
         $ARGV{trace} && $log->trace( 'removing '.$file );
