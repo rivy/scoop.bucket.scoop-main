@@ -1,0 +1,32 @@
+{
+    "version": "0.1.2",
+    "homepage": "https://github.com/labstack/tunnel",
+    "license": "https://github.com/labstack/tunnel/blob/master/LICENSE",
+    "architecture": {
+        "32bit": {
+            "url": "https://github.com/labstack/tunnel/releases/download/0.1.2/tunnel_0.1.2_windows_32-bit.zip",
+            "hash": "f75d7acf765314f555280a1d964c8312fbcac4f403c20bf0c4a58d84895037b5"
+        },
+        "64bit": {
+            "url": "https://github.com/labstack/tunnel/releases/download/0.1.2/tunnel_0.1.2_windows_64-bit.zip",
+            "hash": "0b7f655dab3769ff6fc928262fadb6dc2916fd23783843614485ce55bed90b59"
+        }
+    },
+    "bin": "tunnel.exe",
+    "checkver": {
+        "github": "https://github.com/labstack/tunnel"
+    },
+    "autoupdate": {
+        "architecture": {
+            "32bit": {
+                "url": "https://github.com/labstack/tunnel/releases/download/$version/tunnel_$version_windows_32-bit.zip"
+            },
+            "64bit": {
+                "url": "https://github.com/labstack/tunnel/releases/download/$version/tunnel_$version_windows_64-bit.zip"
+            }
+        },
+        "hash": {
+            "url": "https://github.com/labstack/tunnel/releases/download/$version/tunnel_checksum.txt"
+        }
+    }
+}
