@@ -28,15 +28,10 @@
         ]
     },
     "bin": [
+        "gm.exe",
         [
             "gm.exe",
             "gm-q8"
-        ]
-    ],
-    "shortcuts": [
-        [
-            "gm.exe",
-            "GraphicsMagick-Q8"
         ]
     ],
     "checkver": {
