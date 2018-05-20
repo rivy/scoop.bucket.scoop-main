@@ -1,0 +1,10 @@
+<!DOCTYPE markdown>
+
+# ToDO for maint script
+
+* change name to `ufm` (aka, update from mirror)
+
+* swallow git output
+* add "UPDATED" output for changes (suppress with '-quiet')
+* ? return value = N for update, M = for no update needed (research usual linux tools values, if available)
+
