@@ -6,12 +6,12 @@
     "architecture": {
         "64bit": {
             "url": "https://dl.bintray.com/vszakats/generic/curl-7.61.0-win64-mingw.tar.xz",
-            "hash": "eaf3e7f7879be1b256b79ce07c90c292593567abb65452e1be22623964a867e1",
+            "hash": "dd6cf65aa0c0c0b204a4570b6d76ea0a348c8d37195ffb0eca34e8526a2f7804",
             "extract_dir": "curl-7.61.0-win64-mingw"
         },
         "32bit": {
             "url": "https://dl.bintray.com/vszakats/generic/curl-7.61.0-win32-mingw.tar.xz",
-            "hash": "87f86fc7b4c937b56f1057781af5cd6fcb4e7a4be47261b9d612e9762f89ad0c",
+            "hash": "ed14b506bf9e6b13666ecfdbd8eeda5c8f9e2e181dbd4204e9500432c4f54aa2",
             "extract_dir": "curl-7.61.0-win32-mingw"
         }
     },
