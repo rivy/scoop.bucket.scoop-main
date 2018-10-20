@@ -1,10 +1,10 @@
 {
-    "version": "0.3.0",
+    "version": "0.3.2",
     "license": "MIT",
-    "url": "https://github.com/lihaoyi/mill/releases/download/0.3.0/0.3.0#/mill.bat",
+    "url": "https://github.com/lihaoyi/mill/releases/download/0.3.2/0.3.2#/mill.bat",
     "bin": "mill.bat",
     "homepage": "http://www.lihaoyi.com/mill/",
-    "hash": "c3a44c1f481d15fdeb6abf9f6cacf43367afed6a118936690fa86d9a10c1a3cc",
+    "hash": "8b9ddaaf93ecaf1bec4a4d345a5b2018028b49cf30a8248de0ad19e13f176239",
     "checkver": {
         "github": "https://github.com/lihaoyi/mill"
     },
