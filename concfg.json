@@ -1,10 +1,10 @@
 {
     "homepage": "https://github.com/lukesampson/concfg",
     "description": "Import / export Windows console settings",
-    "version": "0.2018.10.22",
-    "url": "https://github.com/lukesampson/concfg/archive/e4929075bdffe7838d329eabc8618ddd39237eee.zip",
-    "hash": "a20527f529edb05d7307321185ad0cb31d2f1e5b3a7eeaa4c9fd6c3ac85c91bc",
-    "extract_dir": "concfg-e4929075bdffe7838d329eabc8618ddd39237eee",
+    "version": "0.2018.12.20",
+    "url": "https://github.com/lukesampson/concfg/archive/408ad5d87d9cf5f4a49eb9bbdea3add96169327e.zip",
+    "hash": "6a17b8c9f9c6ab4f6fccfd6fae036bf6a2c3e8ed958e642529d1eef1c26d7319",
+    "extract_dir": "concfg-408ad5d87d9cf5f4a49eb9bbdea3add96169327e",
     "bin": "bin\\concfg.ps1",
     "checkver": {
         "url": "https://github.com/lukesampson/concfg",
