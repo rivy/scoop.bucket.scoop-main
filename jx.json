@@ -2,11 +2,11 @@
     "homepage": "https://github.com/jenkins-x/jx",
     "description": "A command line tool for installing and using Jenkins X",
     "license": "Apache-2.0",
-    "version": "2.0.257",
+    "version": "2.0.261",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/jenkins-x/jx/releases/download/v2.0.257/jx-windows-amd64.zip",
-            "hash": "a2e53f2bf1206c36c209e8130f5089c14bf46eba2478595167ceadabb7e74e91"
+            "url": "https://github.com/jenkins-x/jx/releases/download/v2.0.261/jx-windows-amd64.zip",
+            "hash": "1aa4f422786cd13cb26f0ed3f849b4e15e160bb4a24d94a8c619d920a2c7b0e7"
         }
     },
     "bin": [
