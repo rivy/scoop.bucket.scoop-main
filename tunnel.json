@@ -1,16 +1,16 @@
 {
-    "version": "0.4.0",
+    "version": "0.4.2",
     "homepage": "https://github.com/labstack/tunnel-client",
     "description": "Expose local servers to the internet securely.",
     "license": "MIT",
     "architecture": {
         "32bit": {
-            "url": "https://github.com/labstack/tunnel-client/releases/download/v0.4.0/tunnel_0.4.0_windows_32-bit.zip",
-            "hash": "2ca1e661ebaaa733e1d6dfda7dbf6d98f1b5b87e12c713365971cd8020513cce"
+            "url": "https://github.com/labstack/tunnel-client/releases/download/v0.4.2/tunnel_0.4.2_windows_32-bit.zip",
+            "hash": "fe58ec4fe2d7847564925b2e3835cf0fbfbcf737a028190e9e579d25dfaf9b7d"
         },
         "64bit": {
-            "url": "https://github.com/labstack/tunnel-client/releases/download/v0.4.0/tunnel_0.4.0_windows_64-bit.zip",
-            "hash": "ba3037eb2e4e37bc2c2bb4e49e9341c788cf267eb3987763d6e8e39f70b37439"
+            "url": "https://github.com/labstack/tunnel-client/releases/download/v0.4.2/tunnel_0.4.2_windows_64-bit.zip",
+            "hash": "91884d2e2220c9946f385ea995086df69a4abff89212a8f59047b9311dd88f0d"
         }
     },
     "bin": "tunnel.exe",
