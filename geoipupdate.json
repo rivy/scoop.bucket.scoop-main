@@ -1,18 +1,18 @@
 {
     "homepage": "https://dev.maxmind.com/geoip/geoipupdate/",
     "description": "GeoIP Update program to perform automatic updates of GeoIP2 and GeoIP Legacy binary databases.",
-    "version": "4.0.6",
+    "version": "4.1.4",
     "license": "Apache-2.0|MIT",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/maxmind/geoipupdate/releases/download/v4.0.6/geoipupdate_4.0.6_windows_amd64.zip",
-            "hash": "a3c6dab6aa08796ab9f5d5147c378ebd334694338ff8e3c059247c280df187b3",
-            "extract_dir": "geoipupdate_4.0.6_windows_amd64"
+            "url": "https://github.com/maxmind/geoipupdate/releases/download/v4.1.4/geoipupdate_4.1.4_windows_amd64.zip",
+            "hash": "f507991e6c9396412710ad502ccb49af86c737e25285045bca022629c355c065",
+            "extract_dir": "geoipupdate_4.1.4_windows_amd64"
         },
         "32bit": {
-            "url": "https://github.com/maxmind/geoipupdate/releases/download/v4.0.6/geoipupdate_4.0.6_windows_386.zip",
-            "hash": "0491e58946b2729dea07e9ab2052e11bff6f9fe64bd8c23b75bad87f36c4728a",
-            "extract_dir": "geoipupdate_4.0.6_windows_386"
+            "url": "https://github.com/maxmind/geoipupdate/releases/download/v4.1.4/geoipupdate_4.1.4_windows_386.zip",
+            "hash": "ee1683f85e50b620b0ff08481196d43bec982889129d02b7ab57fc677ac139ff",
+            "extract_dir": "geoipupdate_4.1.4_windows_386"
         }
     },
     "bin": "geoipupdate.exe",
