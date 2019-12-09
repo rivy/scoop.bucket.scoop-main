@@ -1,4 +1,6 @@
-# Mirror of [scoop](https://github.com/lukesampson/scoop) "main" bucket
+# Mirror of [`scoop`](https://github.com/lukesampson/scoop) ["main" bucket](https://github.com/ScoopInstaller/Main)
+
+> As a mirror, no pull requests (PRs) are accepted for this repository.
 
 ref: [Scoop: a command-line installer for Windows](http://scoop.sh)
 
