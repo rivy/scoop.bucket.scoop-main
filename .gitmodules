@@ -1,3 +1,3 @@
 [submodule ".#mirror"]
 	path = ".#mirror"
-	url = https://github.com/scoopinstaller/scoop-main.git
+	url = https://github.com/ScoopInstaller/Main.git
