@@ -421,7 +421,7 @@ if ( $mirror_updated || $ARGV{force} ) {
         my $commit_summary = "update:($tag): $interval_log_summary";
         if ((length $commit_summary) > $commit_summary_length) { my $elipsis='...'; $commit_summary = (substr $commit_summary, 0, $commit_summary_length-(length $elipsis)) . $elipsis; }
 
-        my $commit_msg = "$commit_summary\n\n* mirror of github.com/scoopinstaller/scoop-main:bucket".(($interval_log ne q//) ? "\n\n.# Summary (changes by commit)\n\n$interval_log":q//);
+        my $commit_msg = "$commit_summary\n\n* mirror of github.com/ScoopInstaller/Main:bucket".(($interval_log ne q//) ? "\n\n.# Summary (changes by commit)\n\n$interval_log":q//);
 
         $ARGV{trace} && $log->trace( dump_var('$commit_msg') );
 
