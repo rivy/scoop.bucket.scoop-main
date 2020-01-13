@@ -1,16 +1,16 @@
 {
-    "version": "0.60.1",
+    "version": "0.62.2",
     "homepage": "https://gohugo.io",
     "description": "Speedy and flexible static site generator (without Sass/SCSS support)",
     "license": "Apache-2.0",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/gohugoio/hugo/releases/download/v0.60.1/hugo_0.60.1_windows-64bit.zip",
-            "hash": "a38ac95fb167d303fae8c5e17137dd4ee4301e099d4d725e1e103a234d192587"
+            "url": "https://github.com/gohugoio/hugo/releases/download/v0.62.2/hugo_0.62.2_windows-64bit.zip",
+            "hash": "32928214f87629e22f4d1ddc35f8671511b1c36c4d5aa91b5a08e95b474c34e9"
         },
         "32bit": {
-            "url": "https://github.com/gohugoio/hugo/releases/download/v0.60.1/hugo_0.60.1_windows-32bit.zip",
-            "hash": "b8a0db1426b36011691f45d09f58ecd791e8515097d1503cd97fa36b70a72732"
+            "url": "https://github.com/gohugoio/hugo/releases/download/v0.62.2/hugo_0.62.2_windows-32bit.zip",
+            "hash": "1121fc167aa5f293757b18c3de9d670195a467b9d133857fe7939ba6c6e9227a"
         }
     },
     "bin": "hugo.exe",
