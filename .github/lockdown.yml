@@ -1,3 +1,7 @@
+# main: <https://github.com/apps/repo-lockdown> and <https://probot.github.io/apps/repo-lockdown>
+# repo: <https://github.com/dessant/repo-lockdown>
+# * configure via "Repo Lockdown" @ <https://github.com/settings/installations>
+# spell-checker:ignore lockdown
 issues:
     comment: This repository does not accept issues; see README for details.
 pulls:
