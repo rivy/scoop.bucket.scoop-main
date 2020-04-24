@@ -13,9 +13,6 @@
             "-m awscli"
         ]
     ],
-    "checkver": {
-        "github": "https://github.com/aws/aws-cli"
-    },
     "autoupdate": {
         "url": "https://s3.amazonaws.com/aws-cli/AWSCLI64PY3-$version.msi"
     }
