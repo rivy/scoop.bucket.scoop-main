@@ -1,18 +1,18 @@
 {
-    "version": "1.5.0",
+    "version": "1.6.1",
     "description": "Open Source Continuous File Synchronization.",
     "homepage": "https://syncthing.net/",
     "license": "MPL-2.0",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/syncthing/syncthing/releases/download/v1.5.0/syncthing-windows-amd64-v1.5.0.zip",
-            "hash": "c7df1328f8de59e855c8d1291c89aa4725fab3d8c40553fe2e37d1539e4b47ab",
-            "extract_dir": "syncthing-windows-amd64-v1.5.0"
+            "url": "https://github.com/syncthing/syncthing/releases/download/v1.6.1/syncthing-windows-amd64-v1.6.1.zip",
+            "hash": "ca336af48100b52b70a5419165afb2f104e45ac206f75d70ddef5b9a458f1b78",
+            "extract_dir": "syncthing-windows-amd64-v1.6.1"
         },
         "32bit": {
-            "url": "https://github.com/syncthing/syncthing/releases/download/v1.5.0/syncthing-windows-386-v1.5.0.zip",
-            "hash": "aca0160fdf8a2ffa482ac22ffdab0f83343b37f1f97220e194ee9321f652cd68",
-            "extract_dir": "syncthing-windows-386-v1.5.0"
+            "url": "https://github.com/syncthing/syncthing/releases/download/v1.6.1/syncthing-windows-386-v1.6.1.zip",
+            "hash": "85807d6c546aea2e8909a5c22d690ebc147fa84422d105781c0039ab926e8c14",
+            "extract_dir": "syncthing-windows-386-v1.6.1"
         }
     },
     "bin": [
