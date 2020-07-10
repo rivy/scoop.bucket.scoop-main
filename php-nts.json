@@ -6,11 +6,11 @@
     "architecture": {
         "64bit": {
             "url": "https://windows.php.net/downloads/releases/php-7.4.8-nts-Win32-VC15-x64.zip",
-            "hash": "afebd27d04c8def369e014c70ab70b8e6ff9677f46adba7c16e732ff0582e3dc"
+            "hash": "7029bcddd42ed7d9051e3fa85386ba73c6bef3eb9736263d2deb725853c63659"
         },
         "32bit": {
             "url": "https://windows.php.net/downloads/releases/php-7.4.8-nts-Win32-VC15-x86.zip",
-            "hash": "6ba16ca62ae7736fa92e1b5fe7217136d982b803aecc78267c5465e78172a8ec"
+            "hash": "dcc170219a423d53faf2540a1c0963883cb001ad445eb14953990b9aa8368c99"
         }
     },
     "bin": [
