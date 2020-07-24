@@ -1,12 +1,12 @@
 {
-    "version": "1.75.1",
+    "version": "1.76.1",
     "description": "Framework for building and operating serverless applications",
     "homepage": "https://serverless.com",
     "license": "MIT",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/serverless/serverless/releases/download/v1.75.1/serverless-win-x64.exe#/serverless.exe",
-            "hash": "a348fa1658b8e660043ec5e4db9e696290367aa7f6847c660c1f64aef39934d4"
+            "url": "https://github.com/serverless/serverless/releases/download/v1.76.1/serverless-win-x64.exe#/serverless.exe",
+            "hash": "a660e70aa5e64cfbd57b5c9b0b45c8492a7d06c88a035203e1bff622b8b23bdf"
         }
     },
     "bin": "serverless.exe",
