@@ -1,29 +1,29 @@
 {
-    "version": "8.2.1444",
+    "version": "8.2.1464",
     "description": "A highly configurable text editor for efficiently creating and changing any kind of text.",
     "homepage": "https://www.vim.org",
     "license": "Vim",
     "architecture": {
         "64bit": {
             "url": [
-                "https://github.com/vim/vim-win32-installer/releases/download/v8.2.1444/gvim_8.2.1444_x64.zip",
+                "https://github.com/vim/vim-win32-installer/releases/download/v8.2.1464/gvim_8.2.1464_x64.zip",
                 "https://raw.githubusercontent.com/ScoopInstaller/Main/master/scripts/vim/install-context.reg",
                 "https://raw.githubusercontent.com/ScoopInstaller/Main/master/scripts/vim/uninstall-context.reg"
             ],
             "hash": [
-                "3211576a0ad437a5fe18666746b40bbfe7c87010100eceea0c9c984257422e8d",
+                "0a6b051e7f0984e9a77d15f85628b116fbac66ec9616e8edc7894675cfdb81ca",
                 "16a29881837047d783e8556506c73bbb292bdfefe042d77564d3c166d92b9d98",
                 "49225d3470bf4b397d3cab865eddca6e47610be356f812588588c2661a11557e"
             ]
         },
         "32bit": {
             "url": [
-                "https://github.com/vim/vim-win32-installer/releases/download/v8.2.1444/gvim_8.2.1444_x86.zip",
+                "https://github.com/vim/vim-win32-installer/releases/download/v8.2.1464/gvim_8.2.1464_x86.zip",
                 "https://raw.githubusercontent.com/ScoopInstaller/Main/master/scripts/vim/install-context.reg",
                 "https://raw.githubusercontent.com/ScoopInstaller/Main/master/master/scripts/vim/uninstall-context.reg"
             ],
             "hash": [
-                "71d6e15191bbf89c0054e7899f9be90c263eb930ba3813cc326dfcdc438789f6",
+                "5e5d18cd7df6371647e8976ac075fc855de4869fe2e4c508d17d6e6a63a6472f",
                 "16a29881837047d783e8556506c73bbb292bdfefe042d77564d3c166d92b9d98",
                 "49225d3470bf4b397d3cab865eddca6e47610be356f812588588c2661a11557e"
             ]
