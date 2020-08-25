@@ -1,12 +1,12 @@
 {
     "homepage": "https://puppet.com/open-source/bolt",
     "description": "Orchestration and agentless IT automation",
-    "version": "2.23.0",
+    "version": "2.24.1",
     "license": "Apache-2.0",
     "architecture": {
         "64bit": {
-            "url": "https://downloads.puppetlabs.com/windows/puppet6/puppet-bolt-2.23.0-x64.msi",
-            "hash": "16bda6ce80b9d51df0d0c1feb692d6ae77346828b0c6373784cdbde96175499a"
+            "url": "https://downloads.puppetlabs.com/windows/puppet6/puppet-bolt-2.24.1-x64.msi",
+            "hash": "7a31714ef4540d62301b04c7ba95d39daedc30379861baa261dd2018ec6edd8d"
         }
     },
     "extract_dir": "Puppet Labs\\Bolt",
