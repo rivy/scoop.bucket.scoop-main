@@ -5,7 +5,7 @@
     "license": "GPL-3.0-only",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/rbsec/sslscan/releases/download/2.0.5/sslscan-2.0.5.zip",
+            "url": "https://github.com/rbsec/sslscan/releases/download/2.0.5/sslscan-win-2.0.5.zip",
             "hash": "7e22c1b217e95818d8044f234032207559285db9870bf77568e9627e342dceb0"
         }
     },
@@ -14,7 +14,7 @@
     "autoupdate": {
         "architecture": {
             "64bit": {
-                "url": "https://github.com/rbsec/sslscan/releases/download/$version/sslscan-$version.zip"
+                "url": "https://github.com/rbsec/sslscan/releases/download/$version/sslscan-win-$version.zip"
             }
         }
     }
