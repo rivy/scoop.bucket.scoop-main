@@ -1,13 +1,13 @@
 {
-    "version": "100072",
+    "version": "100102",
     "description": "A complete, cross-platform solution to record, convert and stream audio and video.",
     "homepage": "https://ffmpeg.org",
     "license": "GPL-3.0-or-later",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/BtbN/FFmpeg-Builds/releases/download/autobuild-2020-11-27-12-43/ffmpeg-N-100072-g1555cfedf6-win64-gpl-shared-vulkan.zip",
-            "hash": "4f0a5a247eeeb9d6600dcd2085c8f052130c652474375b4a12ac0d2ddd27c950",
-            "extract_dir": "ffmpeg-N-100072-g1555cfedf6-win64-gpl-shared-vulkan"
+            "url": "https://github.com/BtbN/FFmpeg-Builds/releases/download/autobuild-2020-11-29-12-31/ffmpeg-N-100102-gf194cedfe6-win64-gpl-shared-vulkan.zip",
+            "hash": "bc3e2a86f04c739690b75a4f5bda156407c1e84892811f0c507868978bd07703",
+            "extract_dir": "ffmpeg-N-100102-gf194cedfe6-win64-gpl-shared-vulkan"
         }
     },
     "bin": [
