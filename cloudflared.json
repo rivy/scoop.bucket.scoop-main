@@ -1,5 +1,5 @@
 {
-    "version": "2020.11.11",
+    "version": "2021.1.2",
     "description": "Command-line client to interact with Cloudflare's Argo Tunnel, Cloudflare Access, start up a DNS over HTTPS resolver and more.",
     "homepage": "https://github.com/cloudflare/cloudflared",
     "license": {
@@ -8,12 +8,12 @@
     },
     "architecture": {
         "64bit": {
-            "url": "https://github.com/cloudflare/cloudflared/releases/download/2020.11.11/cloudflared-windows-amd64.exe#/cloudflared.exe",
-            "hash": "879532f3e2a18acc692c37013c6f3b8c0bd862ada8f816c1bbcb23ad794d71b6"
+            "url": "https://github.com/cloudflare/cloudflared/releases/download/2021.1.2/cloudflared-windows-amd64.exe#/cloudflared.exe",
+            "hash": "94ed5933fe00cf1bca26800cf572137b458f053eae9ac08a1372989bb72c3213"
         },
         "32bit": {
-            "url": "https://github.com/cloudflare/cloudflared/releases/download/2020.11.11/cloudflared-windows-386.exe#/cloudflared.exe",
-            "hash": "03044bf44ac446fcf894751810e1131c357b93efa582686cf5f4005acaa5fb70"
+            "url": "https://github.com/cloudflare/cloudflared/releases/download/2021.1.2/cloudflared-windows-386.exe#/cloudflared.exe",
+            "hash": "60ab3869c73e4052cefdc24c791abdd52563ac6d581976b97496fc57e9137997"
         }
     },
     "bin": "cloudflared.exe",
