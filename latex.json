@@ -12,18 +12,18 @@
             "hash": "0dfeba2bfcf8492c22661710e0d2c4fa7fb0ebd34f9830048cec03f8fbc9efad",
             "bin": [
                 [
-                    "texmfs\\install\\miktex\\bin\\x64\\miktex-console.exe",
+                    "texmfs\\install\\miktex\\bin\\miktex-console.exe",
                     "miktex",
                     "--hide --mkmaps"
                 ]
             ],
             "shortcuts": [
                 [
-                    "texmfs\\install\\miktex\\bin\\x64\\miktex-console.exe",
+                    "texmfs\\install\\miktex\\bin\\miktex-console.exe",
                     "MiKTeX Console"
                 ]
             ],
-            "env_add_path": "texmfs\\install\\miktex\\bin\\x64"
+            "env_add_path": "texmfs\\install\\miktex\\bin"
         }
     },
     "installer": {
