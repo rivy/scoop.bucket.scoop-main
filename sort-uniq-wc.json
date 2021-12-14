@@ -1,7 +1,7 @@
 {
-    "version": "11.1",
-    "description": "GNU Debugger",
-    "homepage": "https://www.gnu.org/software/gdb/",
+    "version": "9.0",
+    "description": "The sort, uniq and wc utilities from GNU coreutils",
+    "homepage": "https://www.gnu.org/software/coreutils",
     "license": "GPL-3.0-or-later",
     "architecture": {
         "64bit": {
@@ -11,16 +11,17 @@
     },
     "extract_dir": "components-18.0",
     "pre_install": [
-        "Expand-7ZipArchive \"$dir\\gdb-*.7z\" \"$dir\"",
+        "Expand-7ZipArchive \"$dir\\coreutils-*.7z\" \"$dir\"",
         "Get-ChildItem \"$dir\\*.7z\" | Remove-Item -Recurse -Force"
     ],
     "bin": [
-        "bin\\gdb.exe",
-        "bin\\gdbserver.exe"
+        "bin\\sort.exe",
+        "bin\\uniq.exe",
+        "bin\\wc.exe"
     ],
     "checkver": {
         "url": "https://nuwen.net/mingw.html",
-        "regex": "(?sm)>gdb (?<version>[\\d.]+)</a>.*?components-(?<components>[\\d.]+).7z"
+        "regex": "(?sm)>coreutils (?<version>[\\d.]+)</a>.*?components-(?<components>[\\d.]+).7z"
     },
     "autoupdate": {
         "architecture": {
