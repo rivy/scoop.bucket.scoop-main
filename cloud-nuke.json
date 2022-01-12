@@ -1,16 +1,16 @@
 {
-    "version": "0.7.3",
+    "version": "0.7.5",
     "description": "A tool for cleaning up your cloud accounts by nuking (deleting) all resources within it",
     "homepage": "https://github.com/gruntwork-io/cloud-nuke",
     "license": "MIT",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/gruntwork-io/cloud-nuke/releases/download/v0.7.3/cloud-nuke_windows_amd64.exe#/cloud-nuke.exe",
-            "hash": "255f6f867777d21566102b22352a14750f6c6ba4f29c91bebc8a652268d539c0"
+            "url": "https://github.com/gruntwork-io/cloud-nuke/releases/download/v0.7.5/cloud-nuke_windows_amd64.exe#/cloud-nuke.exe",
+            "hash": "a9ebd15b2f7a8e538a64309a65a05abd65c42c0730df5775c4153a1d9ad43b9c"
         },
         "32bit": {
-            "url": "https://github.com/gruntwork-io/cloud-nuke/releases/download/v0.7.3/cloud-nuke_windows_386.exe#/cloud-nuke.exe",
-            "hash": "af5ca1db1cb203c7a8c526077f8383ec6b933d62ee661b937c3971b070572834"
+            "url": "https://github.com/gruntwork-io/cloud-nuke/releases/download/v0.7.5/cloud-nuke_windows_386.exe#/cloud-nuke.exe",
+            "hash": "bb0dffbea6a4d1eeb8a276114965c81b37625bbfff4cf4daf9ddca31f5e684f4"
         }
     },
     "bin": "cloud-nuke.exe",
