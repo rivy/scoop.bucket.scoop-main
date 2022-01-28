@@ -48,8 +48,9 @@
         "log"
     ],
     "checkver": {
-        "url": "http://downloads.mongodb.org.s3.amazonaws.com/current.json",
-        "jsonpath": "$.versions[0].version"
+        "url": "http://downloads.mongodb.org/current.json",
+        "jsonpath": "$.versions..version",
+        "regex": "(\\d+(\\.\\d+)*)"
     },
     "autoupdate": {
         "architecture": {
