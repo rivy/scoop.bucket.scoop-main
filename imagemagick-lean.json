@@ -1,0 +1,43 @@
+{
+    "version": "7.1.0",
+    "description": "Create, edit, compose, and convert 200+ of bitmap images formats.",
+    "homepage": "https://imagemagick.org/",
+    "license": "ImageMagick",
+    "architecture": {
+        "64bit": {
+            "url": "https://download.imagemagick.org/ImageMagick/download/binaries/ImageMagick-7.1.0-portable-Q16-HDRI-x64.zip",
+            "hash": "286ea8b548e14bbd75d13a8d1dd4f78552b994b19c756ae48ddb41e922b3917b"
+        },
+        "32bit": {
+            "url": "https://download.imagemagick.org/ImageMagick/download/binaries/ImageMagick-7.1.0-portable-Q16-HDRI-x86.zip",
+            "hash": "4066afdf2eff09424787a34342e216770dedb9c305459f458cffa642939ace87"
+        }
+    },
+    "bin": [
+        "magick.exe",
+        "dcraw.exe",
+        "IMDisplay.exe"
+    ],
+    "notes": [
+        "- This manifest contains the barebones ImageMagick installation.",
+        "- For appropriate programming DLLs and environment variables, install 'imagemagick' instead."
+    ],
+    "checkver": {
+        "url": "https://download.imagemagick.org/ImageMagick/download/binaries/?C=N;O=D",
+        "regex": "ImageMagick-([\\d.-]+)-portable-Q16-HDRI-x64\\.zip\\.asc"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://download.imagemagick.org/ImageMagick/download/binaries/ImageMagick-$version-portable-Q16-HDRI-x64.zip"
+            },
+            "32bit": {
+                "url": "https://download.imagemagick.org/ImageMagick/download/binaries/ImageMagick-$version-portable-Q16-HDRI-x86.zip"
+            }
+        },
+        "hash": {
+            "mode": "rdf",
+            "url": "https://www.imagemagick.org/download/binaries/digest.rdf"
+        }
+    }
+}
