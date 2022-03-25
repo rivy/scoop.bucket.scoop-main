@@ -1,12 +1,12 @@
 {
-    "version": "1.1.1",
+    "version": "1.2.1",
     "description": "A tool for working with Protocol Buffers APIs, offering a range of features not found in the standard protoc compiler.",
     "homepage": "https://buf.build/",
     "license": "Apache-2.0",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/bufbuild/buf/releases/download/v1.1.1/buf-Windows-x86_64.exe#/buf.exe",
-            "hash": "f7a1c519eaf9267cdd291b47f236d209f9b2ea89a819a3b45af6c30a3e62db34"
+            "url": "https://github.com/bufbuild/buf/releases/download/v1.2.1/buf-Windows-x86_64.exe#/buf.exe",
+            "hash": "b25920ffb5714326cb97f0ac9b56fb6e743f107c589f0081e611ab6406e7b303"
         }
     },
     "bin": "buf.exe",
