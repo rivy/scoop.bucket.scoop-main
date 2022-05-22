@@ -6,7 +6,7 @@
     "architecture": {
         "64bit": {
             "url": "https://github.com/simplex-chat/simplex-chat/releases/download/v2.1.0/simplex-chat-windows-x86-64#/simplex-chat.exe",
-            "hash": "0afe8ec4a540a8d049da9e51876a976d3a9d8f7a5bedaf64c9f471162ba20ea0"
+            "hash": "53a74b345c0b21e4bbd9d3a6d39c22c3a4874fc6792eb9d29082426673d3fd15"
         }
     },
     "bin": "simplex-chat.exe",
