@@ -1,16 +1,16 @@
 {
-    "version": "0.4.3",
+    "version": "0.4.5",
     "description": "An offline tool for querying IP geographic information and CDN provider",
     "homepage": "https://github.com/zu1k/nali",
     "license": "MIT",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/zu1k/nali/releases/download/v0.4.3/nali-windows-amd64-v0.4.3.zip",
-            "hash": "fcd02bd11f329ce57c128d67bf668deb3206a6925862efd2d6c7110f56e03bfb"
+            "url": "https://github.com/zu1k/nali/releases/download/v0.4.5/nali-windows-amd64-v0.4.5.zip",
+            "hash": "9255b9f283f8318749ad63dd735b7f88e1c4b13bef3253c77ec5b6434accf1c8"
         },
         "32bit": {
-            "url": "https://github.com/zu1k/nali/releases/download/v0.4.3/nali-windows-386-v0.4.3.zip",
-            "hash": "054cb6c56156d7a5753e4d74cb2fcac91a82e8ae882d72fb2074d5baf4323e20"
+            "url": "https://github.com/zu1k/nali/releases/download/v0.4.5/nali-windows-386-v0.4.5.zip",
+            "hash": "bd3e4e5fb3e4022a9612b9d22bca62f5a24fe8c704173f69c89973b06199e641"
         }
     },
     "pre_install": "(Get-ChildItem \"$dir\\nali*.exe\")[0] | Rename-Item -NewName 'nali.exe'",
