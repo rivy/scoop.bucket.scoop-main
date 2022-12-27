@@ -1,16 +1,16 @@
 {
-    "version": "7.1.0",
+    "version": "7.1.0-55",
     "description": "Create, edit, compose, and convert 200+ of bitmap images formats.",
     "homepage": "https://imagemagick.org/",
     "license": "ImageMagick",
     "architecture": {
         "64bit": {
-            "url": "https://imagemagick.org/archive/binaries/ImageMagick-7.1.0-portable-Q16-HDRI-x64.zip",
-            "hash": "6a421da318500d60a97c4b01af3957e3d64dea4330c0cb6c5d2c89b4f2db92fd"
+            "url": "https://imagemagick.org/archive/binaries/ImageMagick-7.1.0-55-portable-Q16-HDRI-x64.zip",
+            "hash": "231b1f6a9d4efad370a7bbcaf41ec155ffbde618ebcb7872e8acb37472a7024c"
         },
         "32bit": {
-            "url": "https://imagemagick.org/archive/binaries/ImageMagick-7.1.0-portable-Q16-HDRI-x86.zip",
-            "hash": "6e326666a76fa43f06b747823de2cd5c95fd27d7cc0da24bebd22971b5b3e41e"
+            "url": "https://imagemagick.org/archive/binaries/ImageMagick-7.1.0-55-portable-Q16-HDRI-x86.zip",
+            "hash": "802f35a0c2af910bebb7371905c719bda51673c3663e96910b75fd106f102e73"
         }
     },
     "bin": [
@@ -23,8 +23,9 @@
         "- For appropriate programming DLLs and environment variables, install 'imagemagick' instead."
     ],
     "checkver": {
-        "url": "https://imagemagick.org/archive/binaries/?C=N;O=D",
-        "regex": "ImageMagick-([\\d.-]+)-portable-Q16-HDRI-x64\\.zip\\.asc"
+        "url": "https://imagemagick.org/archive/binaries/digest.rdf",
+        "reverse": true,
+        "regex": "ImageMagick-([\\d.-]+)-portable-Q16-HDRI-x64\\.zip"
     },
     "autoupdate": {
         "architecture": {
