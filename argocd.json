@@ -1,12 +1,12 @@
 {
-    "version": "2.5.7",
+    "version": "2.5.8",
     "description": "CLI for ArgoCD - declarative, GitOps continuous delivery tool for Kubernetes",
     "homepage": "https://github.com/argoproj/argo-cd",
     "license": "Apache-2.0",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/argoproj/argo-cd/releases/download/v2.5.7/argocd-windows-amd64.exe#/argocd.exe",
-            "hash": "fb122646c9c018940a0d560b78b1fdeedbf6c9b8beba79ffa7153d30a98d51eb"
+            "url": "https://github.com/argoproj/argo-cd/releases/download/v2.5.8/argocd-windows-amd64.exe#/argocd.exe",
+            "hash": "29d191a4f8b90382dcfa652383a4d535557b2d284d3e70f3e62fbe536c93fe5d"
         }
     },
     "bin": "argocd.exe",
