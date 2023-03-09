@@ -1,6 +1,6 @@
 {
     "version": "21.8.0.0.0",
-    "description": "Additional libraries for enabling ODBC applications with Oracle Instant Client.",
+    "description": "The SQL*Plus command line tool for SQL and PL/SQL queries with Oracle Instant Client.",
     "homepage": "https://www.oracle.com/database/technologies/instant-client.html",
     "license": {
         "identifier": "Freeware",
@@ -9,12 +9,12 @@
     "depends": "oracle-instant-client",
     "architecture": {
         "64bit": {
-            "url": "https://download.oracle.com/otn_software/nt/instantclient/218000/instantclient-odbc-windows.x64-21.8.0.0.0dbru.zip",
-            "hash": "a73ecf766a544b8f302eb91ad6def66ea83499b47d55f1fe3047414345e0b162"
+            "url": "https://download.oracle.com/otn_software/nt/instantclient/218000/instantclient-sqlplus-windows.x64-21.8.0.0.0dbru.zip",
+            "hash": "ff87a267a16cf4811165e74a47e238db8ab679b31b5729c4435ac2cfcf1c8360"
         },
         "32bit": {
-            "url": "https://download.oracle.com/otn_software/nt/instantclient/218000/instantclient-odbc-nt-21.8.0.0.0dbru.zip",
-            "hash": "f8b7111996c874d9484fff087d66cfbb682dc8ae6c00292494789e9f64d1b07f"
+            "url": "https://download.oracle.com/otn_software/nt/instantclient/218000/instantclient-sqlplus-nt-21.8.0.0.0dbru.zip",
+            "hash": "f0e2c465e3c36247147bcf083aa4d51f2f01eb743450aff5ef2fffbd13608ba1"
         }
     },
     "extract_dir": "instantclient_21_8",
@@ -36,16 +36,12 @@
     "autoupdate": {
         "architecture": {
             "64bit": {
-                "url": "https://download.oracle.com/otn_software/nt/instantclient/$cleanVersion/instantclient-odbc-windows.x64-$versiondbru.zip"
+                "url": "https://download.oracle.com/otn_software/nt/instantclient/$cleanVersion/instantclient-sqlplus-windows.x64-$versiondbru.zip"
             },
             "32bit": {
-                "url": "https://download.oracle.com/otn_software/nt/instantclient/$cleanVersion/instantclient-odbc-nt-$versiondbru.zip"
+                "url": "https://download.oracle.com/otn_software/nt/instantclient/$cleanVersion/instantclient-sqlplus-nt-$versiondbru.zip"
             }
         },
         "extract_dir": "instantclient_$majorVersion_$minorVersion"
-    },
-    "notes": [
-        "Use 'odbc_install.exe' in Oracle Instant Client's dir to install ODBC.",
-        "Use 'odbc_uninstall.exe' in above dir to uninstall it."
-    ]
+    }
 }
