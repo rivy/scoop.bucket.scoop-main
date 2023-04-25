@@ -291,14 +291,14 @@ my $repo_updated = 0;
 {
     local $CWD = $repo_path;  # NOTE: must be absolute path if changing between volumes (eg, `File::Spec->rel2abs($mirror_path)`)?; ToDO: add issue noting *intermittent* GPF when chdir from 'd:\...' to 'c:\...' unless target is absolute path @ https://github.com/dagolden/File-chdir/issues
     # NOTE: `D:\...>perl -e "use File::chdir; { local $CWD='C:..\\.mirror'; };"` DOESN'T reproduce the issue
-    chomp( $repo_branch = Term::ANSIColor::colorstrip(`git rev-parse --abbrev-ref HEAD`) ); ## note: detached HEAD state => retval = 'HEAD'
+    chomp( $repo_branch = Term::ANSIColor::colorstrip(`git rev-parse --quiet --abbrev-ref HEAD`) ); ## note: detached HEAD state => retval = 'HEAD'
     $log->debug( dump_var( q{$repo_branch} ) );
     $log->info( qq{Active local repository branch is "${repo_branch}"} );
-    chomp( $initial_repo_id = Term::ANSIColor::colorstrip( `git rev-parse HEAD` ) );
+    chomp( $initial_repo_id = Term::ANSIColor::colorstrip( `git rev-parse --quiet HEAD` ) );
     $log->debug( dump_var( q{$initial_repo_id} ) );
-    $output = Term::ANSIColor::colorstrip(`git clean -fd`); $ARGV{trace} && $log->trace( $output );
+    $output = Term::ANSIColor::colorstrip(`git clean --quiet -fd`); $ARGV{trace} && $log->trace( $output );
     $output = Term::ANSIColor::colorstrip(`git pull --quiet`); $ARGV{trace} && $log->trace( $output );
-    chomp( $updated_repo_id = Term::ANSIColor::colorstrip(`git rev-parse HEAD`) );
+    chomp( $updated_repo_id = Term::ANSIColor::colorstrip(`git rev-parse --quiet HEAD`) );
     $log->debug( dump_var( q{$updated_repo_id} ) );
 }
 $repo_updated = ($updated_repo_id ne $initial_repo_id);
@@ -320,11 +320,11 @@ my $interval_log_summary = q//;
     $last_mirror_commit_date = q{1970-01-01};  # earliest possible time (within the unix epoch)
     chomp( $last_mirror_commit_date = Term::ANSIColor::colorstrip(`git --no-pager log -1 --date=iso --format="%cd"`) );
     $log->debug( dump_var( q{$last_mirror_commit_date} ) );
-    chomp( $initial_mirror_id = Term::ANSIColor::colorstrip( `git rev-parse HEAD` ) );
+    chomp( $initial_mirror_id = Term::ANSIColor::colorstrip( `git rev-parse --quiet HEAD` ) );
     $log->debug( dump_var( q{$initial_mirror_id} ) );
     $output = Term::ANSIColor::colorstrip(`git fetch --quiet`); $ARGV{trace} && $log->trace( $output );
     $output = Term::ANSIColor::colorstrip(`git checkout --quiet origin/master`); $ARGV{trace} && $log->trace( $output );
-    chomp( $updated_mirror_id = Term::ANSIColor::colorstrip(`git rev-parse HEAD`) );
+    chomp( $updated_mirror_id = Term::ANSIColor::colorstrip(`git rev-parse --quiet HEAD`) );
     $log->debug( dump_var( q{$updated_mirror_id} ) );
 
     $mirror_updated = ($updated_mirror_id ne $initial_mirror_id);
