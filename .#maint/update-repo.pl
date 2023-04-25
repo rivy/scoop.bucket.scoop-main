@@ -45,6 +45,11 @@ B<update-repo> will update the mirrored repository and update the current reposi
 
 =cut
 
+# spell-checker:ignore (names) CPAN
+# spell-checker:ignore (perl) chdir hireswallclock mkpath splitpath sprintf strftime timediff wallclock wantarray
+# spell-checker:ignore (modules/vars) Getopt compat datetime filehandle minlevel optdefs retval EACHLINE
+# spell-checker:ignore (shell/CMD) LocalAppData
+# spell-checker:ignore () substr tempfile tracef debugf infof maint colorstrip
 # ref: http://stackoverflow.com/questions/240661/whats-the-best-practice-for-changing-working-directories-inside-scripts/241489#241489
 
 # ToDO: logging
@@ -284,16 +289,16 @@ my $repo_branch;
 my ($initial_repo_id, $updated_repo_id);
 my $repo_updated = 0;
 {
-    local $CWD = $repo_path;  # NOTE: must be absolute path if changing between volumes (eg, `File::Spec->rel2abs($mirror_path)`)?; ToDO: add issue noting *intermittant* GPF when chdir from 'd:\...' to 'c:\...' unless target is absolute path @ https://github.com/dagolden/File-chdir/issues
+    local $CWD = $repo_path;  # NOTE: must be absolute path if changing between volumes (eg, `File::Spec->rel2abs($mirror_path)`)?; ToDO: add issue noting *intermittent* GPF when chdir from 'd:\...' to 'c:\...' unless target is absolute path @ https://github.com/dagolden/File-chdir/issues
     # NOTE: `D:\...>perl -e "use File::chdir; { local $CWD='C:..\\.mirror'; };"` DOESN'T reproduce the issue
-    chomp( $repo_branch = Term::ANSIColor::colorstrip(`git rev-parse --abbrev-ref HEAD`) ); ## note: detached HEAD state => retval = 'HEAD'
+    chomp( $repo_branch = Term::ANSIColor::colorstrip(`git rev-parse --quiet --abbrev-ref HEAD`) ); ## note: detached HEAD state => retval = 'HEAD'
     $log->debug( dump_var( q{$repo_branch} ) );
     $log->info( qq{Active local repository branch is "${repo_branch}"} );
-    chomp( $initial_repo_id = Term::ANSIColor::colorstrip( `git rev-parse HEAD` ) );
+    chomp( $initial_repo_id = Term::ANSIColor::colorstrip( `git rev-parse --quiet HEAD` ) );
     $log->debug( dump_var( q{$initial_repo_id} ) );
-    $output = Term::ANSIColor::colorstrip(`git clean -fd`); $ARGV{trace} && $log->trace( $output );
+    $output = Term::ANSIColor::colorstrip(`git clean --quiet -fd`); $ARGV{trace} && $log->trace( $output );
     $output = Term::ANSIColor::colorstrip(`git pull --quiet`); $ARGV{trace} && $log->trace( $output );
-    chomp( $updated_repo_id = Term::ANSIColor::colorstrip(`git rev-parse HEAD`) );
+    chomp( $updated_repo_id = Term::ANSIColor::colorstrip(`git rev-parse --quiet HEAD`) );
     $log->debug( dump_var( q{$updated_repo_id} ) );
 }
 $repo_updated = ($updated_repo_id ne $initial_repo_id);
@@ -310,16 +315,16 @@ my $mirror_commit_date;
 my $interval_log = q//;
 my $interval_log_summary = q//;
 {
-    local $CWD = $mirror_path;  # NOTE: must be absolute path if changing between volumes (eg, `File::Spec->rel2abs($mirror_path)`)?; ToDO: add issue noting *intermittant* GPF when chdir from 'd:\...' to 'c:\...' unless target is absolute path @ https://github.com/dagolden/File-chdir/issues
+    local $CWD = $mirror_path;  # NOTE: must be absolute path if changing between volumes (eg, `File::Spec->rel2abs($mirror_path)`)?; ToDO: add issue noting *intermittent* GPF when chdir from 'd:\...' to 'c:\...' unless target is absolute path @ https://github.com/dagolden/File-chdir/issues
     # NOTE: `D:\...>perl -e "use File::chdir; { local $CWD='C:..\\.mirror'; };"` DOESN'T reproduce the issue
     $last_mirror_commit_date = q{1970-01-01};  # earliest possible time (within the unix epoch)
     chomp( $last_mirror_commit_date = Term::ANSIColor::colorstrip(`git --no-pager log -1 --date=iso --format="%cd"`) );
     $log->debug( dump_var( q{$last_mirror_commit_date} ) );
-    chomp( $initial_mirror_id = Term::ANSIColor::colorstrip( `git rev-parse HEAD` ) );
+    chomp( $initial_mirror_id = Term::ANSIColor::colorstrip( `git rev-parse --quiet HEAD` ) );
     $log->debug( dump_var( q{$initial_mirror_id} ) );
     $output = Term::ANSIColor::colorstrip(`git fetch --quiet`); $ARGV{trace} && $log->trace( $output );
     $output = Term::ANSIColor::colorstrip(`git checkout --quiet origin/master`); $ARGV{trace} && $log->trace( $output );
-    chomp( $updated_mirror_id = Term::ANSIColor::colorstrip(`git rev-parse HEAD`) );
+    chomp( $updated_mirror_id = Term::ANSIColor::colorstrip(`git rev-parse --quiet HEAD`) );
     $log->debug( dump_var( q{$updated_mirror_id} ) );
 
     $mirror_updated = ($updated_mirror_id ne $initial_mirror_id);
@@ -412,14 +417,14 @@ if ( $mirror_updated || $ARGV{force} ) {
     if ( $mirror_updated || $ARGV{force}) {
         $log->debugf( 'Committing changes to local repository %s... started', $mirror_updated ? '(forced) ':q// );
 
-        local $CWD = $repo_path;  # NOTE: must be absolute path if changing between volumes (eg, `File::Spec->rel2abs($mirror_path)`)?; ToDO: add issue noting *intermittant* GPF when chdir from 'd:\...' to 'c:\...' unless target is absolute path @ https://github.com/dagolden/File-chdir/issues
+        local $CWD = $repo_path;  # NOTE: must be absolute path if changing between volumes (eg, `File::Spec->rel2abs($mirror_path)`)?; ToDO: add issue noting *intermittent* GPF when chdir from 'd:\...' to 'c:\...' unless target is absolute path @ https://github.com/dagolden/File-chdir/issues
 
         my $tag = DateTime->now()->strftime('0.%Y.%m%d.%H%M');
         my $tempfile = Path::Tiny->tempfile( TEMPLATE => "$ME.($PID).XXXXXXXX", SUFFIX => '.txt' );
         my $fh = $tempfile->filehandle('>');
 
         my $commit_summary = "update:($tag): $interval_log_summary";
-        if ((length $commit_summary) > $commit_summary_length) { my $elipsis='...'; $commit_summary = (substr $commit_summary, 0, $commit_summary_length-(length $elipsis)) . $elipsis; }
+        if ((length $commit_summary) > $commit_summary_length) { my $ellipsis='...'; $commit_summary = (substr $commit_summary, 0, $commit_summary_length-(length $ellipsis)) . $ellipsis; }
 
         my $commit_msg = "$commit_summary\n\n* mirror of github.com/ScoopInstaller/Main:bucket".(($interval_log ne q//) ? "\n\n.# Summary (changes by commit)\n\n$interval_log":q//);
 
@@ -470,7 +475,7 @@ sub sys_execute {
     }
     elsif ($status & 127) {
         $return_code = $status & 127;
-        $error_string = sprintf('Child died with signal %d, %s coredump',
+        $error_string = sprintf('Child died with signal %d, %s core dump',
                                 $return_code, ($status & 128) ? 'with' : 'without');
     }
     else {
