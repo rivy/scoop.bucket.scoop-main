@@ -1,20 +1,20 @@
 {
-    "version": "0.0.272",
+    "version": "0.0.274",
     "description": "An extremely fast Python linter, written in Rust",
     "homepage": "https://github.com/charliermarsh/ruff",
     "license": "MIT",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/charliermarsh/ruff/releases/download/v0.0.272/ruff-x86_64-pc-windows-msvc.zip",
-            "hash": "f310e50544fb63dd25bf35681085d12622b8a91790936b35b65467d86f47a899"
+            "url": "https://github.com/charliermarsh/ruff/releases/download/v0.0.274/ruff-x86_64-pc-windows-msvc.zip",
+            "hash": "48638029c3992691e6416a5b995c11ae97fa8bddd5bf9d46aa3c20cefc7e1929"
         },
         "32bit": {
-            "url": "https://github.com/charliermarsh/ruff/releases/download/v0.0.272/ruff-i686-pc-windows-msvc.zip",
-            "hash": "57a194b7006bac7a0c5dd1f8b1bed636e05e599ec567b27992bf2a86b1d48806"
+            "url": "https://github.com/charliermarsh/ruff/releases/download/v0.0.274/ruff-i686-pc-windows-msvc.zip",
+            "hash": "a6ccd2a0fd8aa2b10015ed7659c41beace151db8c67db349609ebb921d000390"
         },
         "arm64": {
-            "url": "https://github.com/charliermarsh/ruff/releases/download/v0.0.272/ruff-aarch64-pc-windows-msvc.zip",
-            "hash": "afea2d8d645970d46eeff8823c8e299bab7dc0bca3f05e54afa03a31ecf7dd4e"
+            "url": "https://github.com/charliermarsh/ruff/releases/download/v0.0.274/ruff-aarch64-pc-windows-msvc.zip",
+            "hash": "69e1f717871440dc0f440d87d6ddb67fe0fb0f1009072ffefecd70e7f98f3b18"
         }
     },
     "bin": "ruff.exe",
