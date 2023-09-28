@@ -1,13 +1,13 @@
 {
-    "version": "26sep23",
+    "version": "28sep23",
     "description": "Programming language inspired by Rebol. GUI console version, includes view.",
     "homepage": "https://www.red-lang.org",
     "license": {
         "identifier": "BSD-3-Clause,BSL-1.0",
         "url": "https://github.com/red/red#license"
     },
-    "url": "https://static.red-lang.org/dl/auto/win/red-view-26sep23-7b004d91f.exe#/red-view.exe",
-    "hash": "fa3e0456145c4b39c79962d3eb1cde5ceb99423c001f94e5b7ccd8d90834b3bd",
+    "url": "https://static.red-lang.org/dl/auto/win/red-view-28sep23-5d48fb976.exe#/red-view.exe",
+    "hash": "2bd61847ce5f2094231508d06e923d2050ca0401de48e50740d66ab372f22630",
     "bin": "red-view.exe",
     "checkver": {
         "url": "https://static.red-lang.org/dl/auto/win/history.html",
