@@ -1,5 +1,5 @@
 {
-    "version": "1.30.0-202311300134",
+    "version": "1.31.0-202311301809",
     "description": "Java language server",
     "homepage": "https://projects.eclipse.org/projects/eclipse.jdt.ls",
     "license": "EPL-2.0",
@@ -7,8 +7,8 @@
         "JDK": "java/openjdk",
         "Python": "python"
     },
-    "url": "https://download.eclipse.org/jdtls/snapshots/jdt-language-server-1.30.0-202311300134.tar.gz",
-    "hash": "545f68f21911492c2823e184543db993e443863a76d09e237e68c210ba6de54a",
+    "url": "https://download.eclipse.org/jdtls/snapshots/jdt-language-server-1.31.0-202311301809.tar.gz",
+    "hash": "b39c95439c50d678e1595ebf9abccbc05cf84d3b52805c385981f2aacd1ac974",
     "installer": {
         "script": "shim (search_in_path python.exe) $global jdtls \"$dir\\bin\\jdtls\""
     },
