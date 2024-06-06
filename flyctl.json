@@ -1,16 +1,16 @@
 {
-    "version": "0.2.62",
+    "version": "0.2.64",
     "description": "Command line deployment/management client for fly.io services",
     "homepage": "https://github.com/superfly/flyctl",
     "license": " Apache-2.0",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/superfly/flyctl/releases/download/v0.2.62/flyctl_0.2.62_Windows_x86_64.zip",
-            "hash": "5f9eaef9c6e88a72ad4c24fa9722b973d93d6b86b56dc9247898e66af3f307b8"
+            "url": "https://github.com/superfly/flyctl/releases/download/v0.2.64/flyctl_0.2.64_Windows_x86_64.zip",
+            "hash": "a8014dfae15272256c96787e13a8f4cf4320516f22f4fc163850f053facd96ad"
         },
         "arm64": {
-            "url": "https://github.com/superfly/flyctl/releases/download/v0.2.62/flyctl_0.2.62_Windows_arm64.zip",
-            "hash": "1b140d030b46b941cd14bb218f8cf264eb667d37331c5b32b3e95321e307fb4e"
+            "url": "https://github.com/superfly/flyctl/releases/download/v0.2.64/flyctl_0.2.64_Windows_arm64.zip",
+            "hash": "4ef18b40ba01ccd276bcc8fc7c6ab5230f4c349716c98afaa28fb9bd67f15d0b"
         }
     },
     "bin": [
