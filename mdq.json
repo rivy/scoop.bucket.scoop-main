@@ -1,12 +1,12 @@
 {
-    "version": "0.3.1",
+    "version": "0.4.0",
     "description": "Like jq but for Markdown.",
     "homepage": "https://github.com/yshavit/mdq",
     "license": "Apache-2.0",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/yshavit/mdq/releases/download/v0.3.1/mdq-windows.zip",
-            "hash": "bd617e1835dbafecebb1dfdb658afe8188b5923991e933994fccde0b870f0b22"
+            "url": "https://github.com/yshavit/mdq/releases/download/v0.4.0/mdq-windows.zip",
+            "hash": "d77c8f4114b312dd75ab637e0cc6e876937ec19e77da9bae65835b4c261500dc"
         }
     },
     "bin": "mdq.exe",
