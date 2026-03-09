@@ -1,16 +1,16 @@
 {
-    "version": "0.3.29",
+    "version": "0.3.34",
     "description": "Open-source Agent Operating System.",
     "homepage": "https://openfang.sh",
     "license": "MIT|Apache-2.0",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/RightNow-AI/openfang/releases/download/v0.3.29/openfang-x86_64-pc-windows-msvc.zip",
-            "hash": "8143f60edad7697a752d3677901e0ca593768c727fe1247aacc9a9f76e8efbb8"
+            "url": "https://github.com/RightNow-AI/openfang/releases/download/v0.3.34/openfang-x86_64-pc-windows-msvc.zip",
+            "hash": "a6b02cea5a36bf1ae94118dcf345989368ada5a9b807e333c054711c24f20f0e"
         },
         "arm64": {
-            "url": "https://github.com/RightNow-AI/openfang/releases/download/v0.3.29/openfang-aarch64-pc-windows-msvc.zip",
-            "hash": "54fcb6bc676ffd9b0e870ce5dfc55aa7b9f99cfadd77ebd6c0c9645a2d562e8b"
+            "url": "https://github.com/RightNow-AI/openfang/releases/download/v0.3.34/openfang-aarch64-pc-windows-msvc.zip",
+            "hash": "9d3b4b88c39da4988059ce30775f22177657aadafdaa6136696480563556f569"
         }
     },
     "bin": "openfang.exe",
