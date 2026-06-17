@@ -1,18 +1,18 @@
 {
-    "version": "2.34.0",
+    "version": "2.36.0",
     "description": "Disk Usage Analyzer",
     "homepage": "https://github.com/Byron/dua-cli",
     "license": "MIT",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/Byron/dua-cli/releases/download/v2.34.0/dua-v2.34.0-x86_64-pc-windows-msvc.zip",
-            "hash": "abbd93e4d8eaf4d1b9181310a0240e37fc3d3e107a70870289125c0171fefca9",
-            "extract_dir": "dua-v2.34.0-x86_64-pc-windows-msvc"
+            "url": "https://github.com/Byron/dua-cli/releases/download/v2.36.0/dua-v2.36.0-x86_64-pc-windows-msvc.zip",
+            "hash": "01bf5a17fc9ec0c569eb66540f4c88fde0cab868f1f608d9965fd5c65fcc625a",
+            "extract_dir": "dua-v2.36.0-x86_64-pc-windows-msvc"
         },
         "32bit": {
-            "url": "https://github.com/Byron/dua-cli/releases/download/v2.34.0/dua-v2.34.0-i686-pc-windows-msvc.zip",
-            "hash": "bbac5ddf74c3aefde008ba4dfa8c773c9cd35f47ce4c3d96fa08c6998fa58d45",
-            "extract_dir": "dua-v2.34.0-i686-pc-windows-msvc"
+            "url": "https://github.com/Byron/dua-cli/releases/download/v2.36.0/dua-v2.36.0-i686-pc-windows-msvc.zip",
+            "hash": "d81167fc18d7182a94c51a7bbc7f0645cf3a4499fed420504f5bcf47d2755c18",
+            "extract_dir": "dua-v2.36.0-i686-pc-windows-msvc"
         }
     },
     "bin": "dua.exe",
