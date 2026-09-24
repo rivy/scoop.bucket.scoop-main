@@ -1,12 +1,12 @@
 {
-    "version": "18.2.10",
+    "version": "18.3.0",
     "description": "AI Coding agent for the terminal — hash-anchored edits, optimized tool harness, LSP, Python, browser, subagents, and more (fork of pi).",
     "homepage": "https://github.com/can1357/oh-my-pi",
     "license": "MIT",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/can1357/oh-my-pi/releases/download/v18.2.10/omp-windows-x64.exe#/omp.exe",
-            "hash": "cd4f82063d7f44c96bf8c2cbea53b8dcd9eeb9d5643b6d47dd469049c5db8f2d"
+            "url": "https://github.com/can1357/oh-my-pi/releases/download/v18.3.0/omp-windows-x64.exe#/omp.exe",
+            "hash": "9be13f13e3c11dcba25dfccfad0f8c508f66fd8bc2f95a0f06f2964be8d8f527"
         }
     },
     "bin": "omp.exe",
