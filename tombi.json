@@ -1,5 +1,5 @@
 {
-    "version": "1.8.5",
+    "version": "1.8.7",
     "description": "Feature-Rich TOML Toolkit.",
     "homepage": "https://tombi-toml.github.io/tombi/",
     "license": "MIT",
@@ -8,12 +8,12 @@
     },
     "architecture": {
         "64bit": {
-            "url": "https://github.com/tombi-toml/tombi/releases/download/v1.8.5/tombi-cli-1.8.5-x86_64-pc-windows-msvc.zip",
-            "hash": "0f4e2f3c14b076d69a3a836593ef9bad8fae3295676ca21bb1279d0045e194f7"
+            "url": "https://github.com/tombi-toml/tombi/releases/download/v1.8.7/tombi-cli-1.8.7-x86_64-pc-windows-msvc.zip",
+            "hash": "08a5ba68cd5fba091ee54a8e4386113c65402244097dd555edf2ea5438f7a22c"
         },
         "arm64": {
-            "url": "https://github.com/tombi-toml/tombi/releases/download/v1.8.5/tombi-cli-1.8.5-aarch64-pc-windows-msvc.zip",
-            "hash": "516b31b2ee406d6d25d63f1d3e29e1c79c25a8fd8f10049b3d9711bf8a74bf9b"
+            "url": "https://github.com/tombi-toml/tombi/releases/download/v1.8.7/tombi-cli-1.8.7-aarch64-pc-windows-msvc.zip",
+            "hash": "2a2f8a187fcae371f1027cd8cb4920d4f6fc962fc25e9e0479d2818674205f1e"
         }
     },
     "bin": "tombi.exe",
